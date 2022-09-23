@@ -32,3 +32,9 @@ Use `npm run build` to build a self-contained binary **for your current distribu
 **Yes, but** only if:
 - the installation is in your `versions/` directory
 - the installation contains the following sub-directories: `bin/`, `games/`, `mods/`, `textures/`, `screenshots/`, `worlds/`
+
+## licensing
+this project uses a few external things:
+- [feather icons](https://feathericons.com/) - licensed under the MIT license
+- [quicksand font](https://fonts.google.com/specimen/Quicksand) - licensed under the OFL
+- [svelte-headless-table](https://github.com/bryanmylee/svelte-headless-table) - licensed under the MIT license
