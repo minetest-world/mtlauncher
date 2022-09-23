@@ -27,12 +27,16 @@
                 $username = identity.username;
                 $password = identity.password;
                 hasProfile = true;
+
+                $saveIdentity = false;
 			}
             else {
                 //TODO do we want to do this?
                 $username = '';
                 $password = '';
                 hasProfile = false;
+
+                $saveIdentity = true;
 			}
 		});
 
@@ -70,9 +74,11 @@
 		<div class="pl-2">
 			<div class="flex flex-row justify-between">
 				<TextBox isPassword placeholder="Password" bind:value={$password} />
-				<button on:click={() => generatePassword()} class="hover:text-emerald-500 hover:cursor-pointer pl-2" title="Generate Password">
-					<Key />
-				</button>
+				{#if !hasProfile}
+					<button on:click={() => generatePassword()} class="hover:text-emerald-500 hover:cursor-pointer pl-2" title="Generate Password">
+						<Key />
+					</button>
+				{/if}
 			</div>
 		</div>
 	</div>
