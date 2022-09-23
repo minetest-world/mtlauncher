@@ -99,5 +99,5 @@ fn open_minetest(loc: String, args: Vec<String>) {
   //TODO: can we pipe stdio/stderr back to the launcher?
   //this would be really handy for a lot of reasons
   //also this is really fucking insecure LOL
-  Command::new(loc).args(args).spawn();
+  Command::new(loc).env("RUN_IN_PLACE", "1").args(args).spawn();
 }

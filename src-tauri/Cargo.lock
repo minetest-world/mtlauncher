@@ -1885,6 +1885,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "os_info"
+version = "3.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5209b2162b2c140df493a93689e04f8deab3a67634f5bc7a553c0a98e5b8d399"
+dependencies = [
+ "log",
+ "serde",
+ "winapi",
+]
+
+[[package]]
 name = "os_pipe"
 version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2946,6 +2957,7 @@ dependencies = [
  "objc",
  "once_cell",
  "open",
+ "os_info",
  "os_pipe",
  "percent-encoding",
  "rand 0.8.5",

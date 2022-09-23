@@ -31,6 +31,16 @@
         versions = await getVersions();
         $selectedVersion = versions[0];
 
+        selectedServer.subscribe(server => {
+            if (server.hasOwnProperty('proto_max')) {
+                let recommendedVersion = versions.filter(i => i.branch.protocolVersion === server.proto_max && !i.branch.isDev);
+                if (recommendedVersion.length) {
+                    console.log(recommendedVersion);
+                    $selectedVersion = recommendedVersion[0];
+				}
+            }
+        });
+
         firstStart = !(await hasUserdata());
 
         loading = false;
@@ -101,13 +111,14 @@
 		}
 	}
 
-    async function doOpenServer(server, username, password, saveIdentity) {
+    async function doOpenServer(server, username, password, saveIdentity, version) {
+        console.log(version);
         if (saveIdentity) {
             console.log('Saving identity...');
 			await setServerIdentity(server, username, password);
 		}
 
-        await openServer(server, username, password);
+        await openServer(server, username, password, version.name);
 	}
 
     saveIdentity.subscribe(console.log);
@@ -152,7 +163,7 @@
 							{/if}
 						</button>
 					{:else if $selectedServer.hasOwnProperty('address')}
-						<button on:click={() => doOpenServer($selectedServer, $username, $password, $saveIdentity)} class="bg-emerald-500 hover:bg-emerald-400 p-4 font-bold text-white flex flex-col items-center">
+						<button on:click={() => doOpenServer($selectedServer, $username, $password, $saveIdentity, $selectedVersion)} class="bg-emerald-500 hover:bg-emerald-400 p-4 font-bold text-white flex flex-col items-center">
 							<div>Play</div>
 							<div class="font-medium text-sm">{$selectedServer.address}:{$selectedServer.port || 30000}</div>
 						</button>
