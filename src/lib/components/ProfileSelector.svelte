@@ -1,0 +1,89 @@
+<script>
+	import { getUserdata } from '$lib/userdata';
+    import { selectedServer } from '$lib/stores';
+    import { onMount, onDestroy } from 'svelte';
+	import { writable } from 'svelte/store';
+
+
+    import TextBox from '$lib/components/element/form/TextBox.svelte';
+    import Checkbox from '$lib/components/element/form/Checkbox.svelte';
+    import Key from '$lib/icon/Key.svelte';
+
+    let profiles;
+    let hasProfile = false;
+    let unsubscribeServer, unsubscribeUserdata;
+
+    export let username = writable('');
+    export let password = writable('');
+    export let saveIdentity = writable(true);
+
+    onMount(async() => {
+		console.log('mounting babey!!');
+        profiles = await getUserdata();
+
+        console.log(profiles);
+
+        unsubscribeServer = selectedServer.subscribe(val => {
+            let prof = $profiles;
+            console.log(prof.server_identities);
+            if (Object.keys(prof.server_identities).includes(val.fullAddress)) {
+                let identity = prof.server_identities[val.fullAddress];
+                console.log(identity);
+
+                $username = identity.username;
+                $password = identity.password;
+                hasProfile = true;
+			}
+            else {
+                //TODO do we want to do this?
+                $username = '';
+                $password = '';
+                hasProfile = false;
+			}
+		});
+
+        unsubscribeUserdata = profiles.subscribe(val => {
+            let server = $selectedServer;
+            if (Object.keys(val.server_identities).includes(server.fullAddress)) {
+                hasProfile = true;
+			}
+		});
+	});
+
+    onDestroy(() => {
+        unsubscribeServer();
+        unsubscribeUserdata();
+	})
+
+    function generatePassword() {
+        const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?,.-_()[];:';
+        const len = 32;
+        let res = '';
+        for (let i = 0; i < len; i++) {
+            let randIndex = Math.random() * charset.length;
+            res += charset.charAt(randIndex);
+		}
+
+        $password = res;
+	}
+</script>
+
+<div>
+	<div class="flex flex-row">
+		<div class="pr-1">
+			<TextBox placeholder="Username" bind:value={$username} />
+		</div>
+		<div class="pl-2">
+			<div class="flex flex-row justify-between">
+				<TextBox isPassword placeholder="Password" bind:value={$password} />
+				<button on:click={() => generatePassword()} class="hover:text-emerald-500 hover:cursor-pointer pl-2" title="Generate Password">
+					<Key />
+				</button>
+			</div>
+		</div>
+	</div>
+
+	{#if !hasProfile}
+		<Checkbox bind:checked={$saveIdentity} label="Save Profile" />
+	{/if}
+</div>

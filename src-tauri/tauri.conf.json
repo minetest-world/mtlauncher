@@ -1,0 +1,101 @@
+{
+  "$schema": "../node_modules/@tauri-apps/cli/schema.json",
+  "build": {
+    "beforeBuildCommand": "npm run sveltekit:build",
+    "beforeDevCommand": "npm run sveltekit:dev",
+    "devPath": "http://localhost:5173",
+    "distDir": "../build"
+  },
+  "package": {
+    "productName": "Minetest Launcher",
+    "version": "0.1.0"
+  },
+  "tauri": {
+    "allowlist": {
+      "dialog": {
+        "all": true
+      },
+      "path": {
+        "all": true
+      },
+      "shell": {
+        "execute": true,
+        "open": ".*"
+      },
+      "fs": {
+        "readFile": true,
+        "writeFile": true,
+        "readDir": true,
+        "copyFile": true,
+        "createDir": true,
+        "renameFile": true,
+        "scope": [
+          "$APP/preferences.json",
+          "$APP/user.dat",
+          "$APP",
+          "$APP/versions",
+          "$APP/versions/*",
+          "$APP/tmp.zip"
+        ]
+      },
+      "http": {
+        "request": true,
+        "scope": [
+          "https://servers.minetest.net/list",
+          "https://github.com/minetest/minetest/releases/download/*",
+          "https://api.github.com/repos/minetest/minetest/releases",
+          "https://blog.minetest.net/feed.rss",
+          "https://content.minetest.net/api/*"
+        ]
+      }
+    },
+    "bundle": {
+      "active": true,
+      "category": "DeveloperTool",
+      "copyright": "",
+      "deb": {
+        "depends": []
+      },
+      "externalBin": [],
+      "icon": [
+        "icons/32x32.png",
+        "icons/128x128.png",
+        "icons/128x128@2x.png",
+        "icons/icon.icns",
+        "icons/icon.ico"
+      ],
+      "identifier": "world.minetest.mtlauncher",
+      "longDescription": "",
+      "macOS": {
+        "entitlements": null,
+        "exceptionDomain": "",
+        "frameworks": [],
+        "providerShortName": null,
+        "signingIdentity": null
+      },
+      "resources": [],
+      "shortDescription": "",
+      "targets": "all",
+      "windows": {
+        "certificateThumbprint": null,
+        "digestAlgorithm": "sha256",
+        "timestampUrl": ""
+      }
+    },
+    "security": {
+      "csp": null
+    },
+    "updater": {
+      "active": false
+    },
+    "windows": [
+      {
+        "fullscreen": false,
+        "height": 768,
+        "resizable": true,
+        "title": "Minetest Launcher",
+        "width": 1280
+      }
+    ]
+  }
+}

@@ -1,0 +1,155 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap');
+
+body, html {
+    scrollbar-width: thin;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #121212;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background: #4e9a06;
+}
+
+.svgicon {
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+}
+
+.svgicon.filled path {
+    fill: currentColor;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+[type="checkbox"]:checked {
+    background-color: currentColor;
+    border-color: transparent;
+}
+
+/* markdown */
+.markdown h1,
+.markdown h2,
+.markdown h3,
+.markdown h4,
+.markdown h5 {
+    padding-top: .5rem;
+    padding-bottom: 1rem;
+    font-weight: 700;
+}
+
+.markdown h1 {
+    font-size: 2rem;
+}
+
+.markdown h2 {
+    font-size: 1.75rem;
+}
+
+.markdown h3 {
+    font-size: 1.5rem;
+}
+
+.markdown h4 {
+    font-size: 1.25rem;
+}
+
+.markdown ul {
+    padding-top: .25rem;
+    padding-bottom: .25rem;
+    padding-left: 1.5rem;
+    list-style-type: circle;
+}
+
+.markdown a {
+    color: #406f13;
+    text-decoration: underline;
+}
+
+.markdown a:hover {
+    color: #4e9a06;
+}
+
+/* icomoon */
+
+@font-face {
+    font-family: 'icomoon';
+    src:  url('/fonts/icomoon.eot?rcpok1');
+    src:  url('/fonts/icomoon.eot?rcpok1#iefix') format('embedded-opentype'),
+    url('/fonts/icomoon.ttf?rcpok1') format('truetype'),
+    url('/fonts/icomoon.woff?rcpok1') format('woff'),
+    url('/fonts/icomoon.svg?rcpok1#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'icomoon' !important;
+    speak: never;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-chevron-down:before {
+    content: "\e900";
+}
+.icon-chevron-left:before {
+    content: "\e901";
+}
+.icon-chevron-right:before {
+    content: "\e902";
+}
+.icon-chevron-up:before {
+    content: "\e903";
+}
+.icon-edit-2:before {
+    content: "\e904";
+}
+.icon-external-link:before {
+    content: "\e905";
+}
+.icon-eye:before {
+    content: "\e906";
+}
+.icon-eye-off:before {
+    content: "\e907";
+}
+.icon-folder:before {
+    content: "\e908";
+}
+.icon-heart:before {
+    content: "\e909";
+}
+.icon-help-circle:before {
+    content: "\e90a";
+}
+.icon-refresh-ccw:before {
+    content: "\e90b";
+}
+.icon-settings:before {
+    content: "\e90c";
+}
+.icon-slash:before {
+    content: "\e90d";
+}
