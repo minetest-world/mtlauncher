@@ -23,8 +23,6 @@ export async function getContent() {
 
 let packageCache = writable({});
 export async function getPackageInfo(author, pack) {
-    console.log(author);
-    console.log(pack);
     let cache = get(packageCache);
     let keys = Object.keys(cache);
     if (!keys.length || !keys.includes(`${author}@${pack}`)) {
@@ -32,7 +30,6 @@ export async function getPackageInfo(author, pack) {
             tFetch(`https://content.minetest.net/api/packages/${author}/${pack}/`),
             tFetch(`https://content.minetest.net/api/packages/${author}/${pack}/dependencies/?only_hard=1`),
         ]);
-        console.log(baseResponse);
         let deps = Object.values(dependencyResponse.data)[0];
         let data = baseResponse.data;
         data.hard_dependencies = deps;

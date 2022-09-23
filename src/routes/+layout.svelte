@@ -102,7 +102,6 @@
 	}
 
     async function doOpenServer(server, username, password, saveIdentity) {
-        console.log(username);
         if (saveIdentity) {
             console.log('Saving identity...');
 			await setServerIdentity(server, username, password);

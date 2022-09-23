@@ -8,7 +8,6 @@ export async function hasUserdata() {
         dir: BaseDirectory.App,
         recursive: false
     });
-    console.log(entries);
     return entries.filter(ent => !ent.hasOwnProperty('children') && 'user.dat' === ent.name).length;
 }
 
@@ -52,9 +51,6 @@ export async function checkPassword(password) {
     }
 
     try {
-        console.log(rawUserdataCache);
-        console.log(decrypt(rawUserdataCache, password));
-        console.log(decrypt(rawUserdataCache, password).startsWith('{"friends"'));
         return decrypt(rawUserdataCache, password).startsWith('{"friends"');
     }
     catch {

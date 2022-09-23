@@ -18,18 +18,12 @@
     export let saveIdentity = writable(true);
 
     onMount(async() => {
-		console.log('mounting babey!!');
         profiles = await getUserdata();
-
-        console.log(profiles);
 
         unsubscribeServer = selectedServer.subscribe(val => {
             let prof = $profiles;
-            console.log(prof.server_identities);
             if (Object.keys(prof.server_identities).includes(val.fullAddress)) {
                 let identity = prof.server_identities[val.fullAddress];
-                console.log(identity);
-
                 $username = identity.username;
                 $password = identity.password;
                 hasProfile = true;
