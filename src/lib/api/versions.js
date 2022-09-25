@@ -2,11 +2,13 @@ import { BaseDirectory, readDir, createDir } from "@tauri-apps/api/fs";
 import {fetch as tFetch, ResponseType} from '@tauri-apps/api/http';
 import { appDir, join } from "@tauri-apps/api/path";
 import { open } from "@tauri-apps/api/shell";
+import { type } from '@tauri-apps/api/os';
 
 import { writable, get } from 'svelte/store';
 
 let versionCache = writable([]);
 export async function getVersions(forceReload = false) {
+    let platform = await type();
     if (forceReload || !get(versionCache).length) {
         let branches = await tFetch('https://content.minetest.net/api/minetest_versions/');
         // fix the weird split in branch names that are otherwise identical
@@ -26,10 +28,28 @@ export async function getVersions(forceReload = false) {
             });
         }
 
-        let versions = await tFetch('https://api.github.com/repos/minetest/minetest/releases');
+        let versions;
+        switch (platform) {
+            case 'Linux':
+                versions = await tFetch(`https://api.github.com/repos/An0n3m0us/Minetest-AppImages/releases`);
+                break;
+
+            case 'Darwin':
+            case 'Windows_NT':
+                versions = await tFetch('https://api.github.com/repos/minetest/minetest/releases');
+                break;
+        }
+
+        versions = versions.data;
+        versions = versions.filter(i => i.tag_name !== '5.4.2-android');
+
+        if ('Darwin' === platform) {
+            versions = versions.filter(i => i.assets.filter(j => j.name.includes('-osx')).length);
+        }
+
         let installedVersions = await getInstalledVersions();
 
-        versions = versions.data.map(ver => {
+        versions = versions.map(ver => {
             let res = {};
 
             res.name = ver.tag_name;
