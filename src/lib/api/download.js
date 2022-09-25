@@ -1,6 +1,6 @@
 import {fetch as tFetch, ResponseType} from '@tauri-apps/api/http';
 import {BaseDirectory, createDir, writeBinaryFile, readDir} from "@tauri-apps/api/fs";
-import { loadAsync } from 'jszip';
+import { type, arch } from '@tauri-apps/api/os';
 import {invoke} from "@tauri-apps/api/tauri";
 
 export async function versionExists(version = '5.6.0') {
@@ -9,7 +9,7 @@ export async function versionExists(version = '5.6.0') {
             dir: BaseDirectory.App,
             recursive: false
         });
-        return entries.filter(ent => 'minetest.conf.example' === ent.name).length;
+        return entries.length;
     }
     catch {
         return false;
@@ -23,10 +23,33 @@ export async function downloadAndUnzip(url, targetDir) {
     });
 }
 
+export async function downloadFile(url, targetFile) {
+    return invoke('download_file', {
+        url: url,
+        target: targetFile
+    });
+}
+
 export async function downloadVersion(version = '5.6.0') {
     console.log('we downloadin babey!!');
-    let arch = 'win64'; // or 'osx'
-    return downloadAndUnzip(`https://github.com/minetest/minetest/releases/download/${version}/minetest-${version}-${arch}.zip`, `/versions/${version}`);
+    let platform = await type();
+    switch (platform) {
+        case 'Linux':
+            await createDir(`versions/${version}`, {
+                dir: BaseDirectory.App,
+            });
+            return downloadFile(`https://github.com/An0n3m0us/Minetest-AppImages/releases/download/${version}/Minetest-${version}-x86_64.AppImage`, `/versions/${version}/minetest.AppImage`);
+
+        case 'Darwin':
+            await createDir(`versions/${version}`, {
+                dir: BaseDirectory.App,
+            });
+            return downloadAndUnzip(`https://github.com/minetest/minetest/releases/download/${version}/minetest-${version}-osx.zip`, `/versions/${version}/minetest.app`);
+
+        case 'Windows_NT':
+            return downloadAndUnzip(`https://github.com/minetest/minetest/releases/download/${version}/minetest-${version}-win64.zip`, `/versions/${version}`);
+    }
+    return false;
 }
 
 export async function unzipVersion(zipFile, version = '5.6.0') {

@@ -8,7 +8,7 @@
   },
   "package": {
     "productName": "Minetest Launcher",
-    "version": "0.0.2"
+    "version": "0.0.3"
   },
   "tauri": {
     "allowlist": {
@@ -47,6 +47,8 @@
           "https://servers.minetest.net/list",
           "https://github.com/minetest/minetest/releases/download/*",
           "https://api.github.com/repos/minetest/minetest/releases",
+          "https://api.github.com/repos/An0n3m0us/Minetest-AppImages/releases",
+          "https://api.github.com/repos/An0n3m0us/Minetest-AppImages/download/*",
           "https://blog.minetest.net/feed.rss",
           "https://content.minetest.net/api/*"
         ]

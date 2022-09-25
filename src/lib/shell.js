@@ -3,25 +3,31 @@ import { type, arch } from '@tauri-apps/api/os';
 import { appDir } from "@tauri-apps/api/path";
 import { invoke } from '@tauri-apps/api/tauri';
 
+export async function getVersionFolder(version) {
+    let baseDir = await appDir();
+
+    return `${baseDir}/versions/${version}`;
+}
+
 export async function getBinaryLocation(version) {
     let [ platform, osArch, baseDir ] = await Promise.all([
         type(),
         arch(),
-        appDir()
+        getVersionFolder(version)
     ]);
 
     switch (platform) {
         case 'Linux':
-            return `${baseDir}/versions/${version}/minetest.AppImage`;
+            return `${baseDir}/minetest.AppImage`;
 
         case 'Darwin':
-            return `${baseDir}/versions/${version}/minetest.app`;
+            return `${baseDir}/minetest.app`;
 
         case 'Windows_NT':
-            return `${baseDir}/versions/${version}/bin/minetest.exe`;
+            return `${baseDir}/bin/minetest.exe`;
     }
 
-    return `${baseDir}/versions/${version}/minetest`;
+    return `${baseDir}/minetest`;
 }
 
 export async function openServer(server, username, password, version = '5.6.0') {
@@ -70,10 +76,12 @@ export async function openWorld(worldName, version = '5.6.0') {
 }
 
 async function openMinetest(version, args) {
-    let dir = await getBinaryLocation(version);
+    let binary = await getBinaryLocation(version);
+    let baseDir = await getVersionFolder(version);
 
     await invoke('open_minetest', {
-        loc: dir,
+        loc: binary,
+        contentDir: baseDir,
         args: args
     });
 }

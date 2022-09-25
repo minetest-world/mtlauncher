@@ -5,7 +5,7 @@
 
 fn main() {
   tauri::Builder::default()
-      .invoke_handler(tauri::generate_handler![open_minetest, download_and_unzip])
+      .invoke_handler(tauri::generate_handler![open_minetest, download_and_unzip, download_file])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
 }
@@ -26,6 +26,28 @@ use zip_extensions::*;
 #[tauri::command]
 fn get_app_dir(app_handle: tauri::AppHandle) -> Option<PathBuf> {
   return app_handle.path_resolver().app_dir();
+}
+
+#[tauri::command]
+async fn download_file(app_handle: tauri::AppHandle, url: String, target: String) -> bool{
+  let app_dir = app_handle.path_resolver().app_dir().unwrap().into_os_string().into_string().to_owned().unwrap();
+  let response = reqwest::get(&url).await.unwrap();
+  let mut location = (app_dir.to_string() + &target).to_owned();
+
+  let path = Path::new(&location);
+
+  println!("{}", path.display());
+
+  let mut file = match File::create(&path) {
+    Err(why) => panic!("couldn't create {}", why),
+    Ok(file) => file
+  };
+
+  let content = response.bytes().await.unwrap();
+  file.write_all(content.as_ref());
+  println!("done");
+
+  return true;
 }
 
 #[tauri::command]
@@ -95,9 +117,12 @@ fn copy_dir_all(src: impl AsRef<Path>, dst: impl AsRef<Path>) -> io::Result<()> 
 }
 
 #[tauri::command]
-fn open_minetest(loc: String, args: Vec<String>) {
+fn open_minetest(loc: String, content_dir: String, args: Vec<String>) {
   //TODO: can we pipe stdio/stderr back to the launcher?
   //this would be really handy for a lot of reasons
   //also this is really fucking insecure LOL
-  Command::new(loc).env("RUN_IN_PLACE", "1").args(args).spawn();
+  Command::new(loc)
+      .env("MINETEST_USER_PATH", content_dir)
+      .args(args)
+      .spawn();
 }
