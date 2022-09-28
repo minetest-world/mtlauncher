@@ -26,6 +26,7 @@ export async function fileBackedStore(fileName,
     }) || defaultValue;
 
     if (shouldCreateFile) {
+        console.log(`Writing ${fileName} for the first time...`)
         await writeTextFile(fileName, writeFunc(defaultValue), {
             dir: BaseDirectory.App
         });
@@ -33,7 +34,13 @@ export async function fileBackedStore(fileName,
 
     const { subscribe, set, update } = writable(startContent);
 
+    let firstRun = true;
     subscribe(async value => {
+        if (firstRun) {
+            console.log(`Discarding write for ${fileName} because it's the first run`);
+            firstRun = false;
+            return;
+        }
         console.log(`Writing ${fileName}...`);
         await writeTextFile(fileName, writeFunc(value), {
             dir: BaseDirectory.App

@@ -15,6 +15,8 @@
 
     import TextBox from '$lib/components/element/form/TextBox.svelte';
     import Button from '$lib/components/element/form/Button.svelte';
+    import ModalContainer from '$lib/components/modal/ModalContainer.svelte';
+    import Cog from '$lib/icon/Cog.svelte';
 
     let versions = [];
     let loading = true;
@@ -111,6 +113,10 @@
 		}
 	}
 
+	async function checkKeyInput(event){
+		if (event.keyCode == 13 && tempPass) login();
+	}
+
     async function doOpenServer(server, username, password, saveIdentity, version) {
         console.log(version);
         if (saveIdentity) {
@@ -120,17 +126,23 @@
 
         await openServer(server, username, password, version.name);
 	}
-
-    saveIdentity.subscribe(console.log);
 </script>
 {#if loading}
 	<FullLoader />
 {:else}
 	{#if passwordAdded}
 		<Navbar>
-			<NavbarItem href="/news" label="News" />
-			<NavbarItem href="/games" label="Games" />
-			<NavbarItem href="/servers" label="Play Online" />
+			<svelte:fragment slot="left">
+				<NavbarItem href="/news" label="News" />
+				<NavbarItem href="/games" label="Games" />
+        <NavbarItem href="/screenshots" label="Screenshots" />
+				<NavbarItem href="/servers" label="Play Online" />
+			</svelte:fragment>
+			<svelte:fragment slot="right">
+				<NavbarItem href="/settings">
+					<Cog />
+				</NavbarItem>
+			</svelte:fragment>
 		</Navbar>
 		<div class="w-full h-full">
 			<div class="pt-12 pb-24">
@@ -206,7 +218,7 @@
 			</span>
 			<div class="w-64">
 				<div class="pb-4">
-					<TextBox bind:value={tempPass} isPassword placeholder="Password" />
+					<TextBox bind:value={tempPass} isPassword placeholder="Password" on:keypress={checkKeyInput}  />
 				</div>
 				<div class="flex w-full justify-end">
 					{#if tempPass}
@@ -219,3 +231,4 @@
 		</div>
 	{/if}
 {/if}
+<ModalContainer />

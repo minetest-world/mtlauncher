@@ -38,3 +38,8 @@ this project uses a few external things:
 - [feather icons](https://feathericons.com/) - licensed under the MIT license
 - [quicksand font](https://fonts.google.com/specimen/Quicksand) - licensed under the OFL
 - [svelte-headless-table](https://github.com/bryanmylee/svelte-headless-table) - licensed under the MIT license
+
+this project also modifies the [minetest logo](https://www.minetest.net/media/icon.svg) which is licensed under **CC-BY-SA 3.0**.
+the modified logo is used in the following locations, and as such are licensed as **CC-BY-SA 3.0**:
+- `src-tauri/icons/*`
+- `src/lib/icon/Logo.svelte`

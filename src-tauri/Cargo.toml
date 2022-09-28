@@ -1,11 +1,11 @@
 [package]
-name = "app"
-version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
-license = ""
-repository = ""
-default-run = "app"
+name = "MTLauncher"
+version = "0.0.5"
+description = "Alternative Minetest Launcher"
+authors = ["recluse4615"]
+license = "LGPL-2.0-only"
+repository = "https://github.com/minetest-world/mtlauncher"
+default-run = "MTLauncher"
 edition = "2021"
 rust-version = "1.57"
 
@@ -17,10 +17,13 @@ tauri-build = { version = "1.0.4", features = [] }
 [dependencies]
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.0.5", features = ["dialog-all", "fs-copy-file", "fs-create-dir", "fs-read-dir", "fs-read-file", "fs-rename-file", "fs-write-file", "http-request", "os-all", "path-all", "shell-execute", "shell-open"] }
+tauri = { version = "1.0.5", features = ["dialog-all", "fs-copy-file", "fs-create-dir", "fs-read-dir", "fs-read-file", "fs-rename-file", "fs-write-file", "http-request", "os-all", "path-all", "protocol-asset", "shell-execute", "shell-open"] }
 reqwest = { version = "0.11"}
 zip = "*"
 zip-extensions = "*"
+
+[dependencies.tauri-plugin-fs-watch]
+git = "https://github.com/tauri-apps/tauri-plugin-fs-watch"
 
 [features]
 # by default Tauri runs in production mode

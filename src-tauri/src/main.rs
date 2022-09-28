@@ -3,8 +3,11 @@
   windows_subsystem = "windows"
 )]
 
+use tauri_plugin_fs_watch::Watcher;
+
 fn main() {
   tauri::Builder::default()
+      .plugin(Watcher::default())
       .invoke_handler(tauri::generate_handler![open_minetest, download_and_unzip, download_file])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
