@@ -25,6 +25,12 @@
         "execute": true,
         "open": ".*"
       },
+      "protocol": {
+        "asset": true,
+        "assetScope": [
+          "$APP/versions/*"
+        ]
+      },
       "fs": {
         "readFile": true,
         "writeFile": true,
@@ -35,6 +41,7 @@
         "scope": [
           "$APP/preferences.json",
           "$APP/user.dat",
+          "$APP/core.conf",
           "$APP",
           "$APP/versions",
           "$APP/versions/*",
@@ -88,7 +95,7 @@
       }
     },
     "security": {
-      "csp": null
+      "csp": "default-src 'self'; font-src 'self' https://fonts.googleapis.com; img-src 'self' asset: https://asset.localhost https://blog.minetest.net https://content.minetest.net"
     },
     "updater": {
       "active": false
