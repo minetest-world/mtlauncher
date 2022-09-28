@@ -26,6 +26,7 @@ export async function fileBackedStore(fileName,
     }) || defaultValue;
 
     if (shouldCreateFile) {
+        console.log(`Writing ${fileName} for the first time...`)
         await writeTextFile(fileName, writeFunc(defaultValue), {
             dir: BaseDirectory.App
         });

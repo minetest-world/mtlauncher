@@ -131,6 +131,7 @@
 			<NavbarItem href="/news" label="News" />
 			<NavbarItem href="/games" label="Games" />
 			<NavbarItem href="/servers" label="Play Online" />
+			<NavbarItem href="/settings" label="Settings" />
 		</Navbar>
 		<div class="w-full h-full">
 			<div class="pt-12 pb-24">
