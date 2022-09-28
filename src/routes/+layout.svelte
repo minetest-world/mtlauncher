@@ -15,6 +15,7 @@
 
     import TextBox from '$lib/components/element/form/TextBox.svelte';
     import Button from '$lib/components/element/form/Button.svelte';
+    import Cog from '$lib/icon/Cog.svelte';
 
     let versions = [];
     let loading = true;
@@ -124,18 +125,23 @@
 
         await openServer(server, username, password, version.name);
 	}
-
-    saveIdentity.subscribe(console.log);
 </script>
 {#if loading}
 	<FullLoader />
 {:else}
 	{#if passwordAdded}
 		<Navbar>
-			<NavbarItem href="/news" label="News" />
-			<NavbarItem href="/games" label="Games" />
-			<NavbarItem href="/screenshots" label="Screenshots" />
-			<NavbarItem href="/servers" label="Play Online" />
+			<svelte:fragment slot="left">
+				<NavbarItem href="/news" label="News" />
+				<NavbarItem href="/games" label="Games" />
+        <NavbarItem href="/screenshots" label="Screenshots" />
+				<NavbarItem href="/servers" label="Play Online" />
+			</svelte:fragment>
+			<svelte:fragment slot="right">
+				<NavbarItem href="/settings">
+					<Cog />
+				</NavbarItem>
+			</svelte:fragment>
 		</Navbar>
 		<div class="w-full h-full">
 			<div class="pt-12 pb-24">

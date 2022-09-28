@@ -41,7 +41,8 @@
         "scope": [
           "$APP/preferences.json",
           "$APP/user.dat",
-          "$APP/core.conf",
+          "$APP/minetest.mtlauncher.conf",
+          "$APP/minetest.merged.conf",
           "$APP",
           "$APP/versions",
           "$APP/versions/*",
