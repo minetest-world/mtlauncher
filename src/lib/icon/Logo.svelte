@@ -1,3 +1,11 @@
+<script>
+	/*
+	* this file is a modified version of the minetest logo which was licensed under CC-BY-SA 3.0.
+	* this specific file is licensed under CC-BY-SA 3.0 to match
+	*
+	* https://creativecommons.org/licenses/by-sa/3.0/
+	* */
+</script>
 <svg class="logoicon"
 	 viewBox="0 0 48 48" style="enable-background:new 0 0 48 48;">
 	<g id="Layer_1">
