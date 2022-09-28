@@ -1,5 +1,6 @@
 <script>
 	import { getScreenshots } from '$lib/screenshots';
+    import { showComponent } from '$lib/modal';
 
     import { onMount } from 'svelte';
 
@@ -7,6 +8,7 @@
 
     import FullLoader from '$lib/components/FullLoader.svelte';
 	import LocalImage from '$lib/components/image/LocalImage.svelte';
+    import LocalImageModal from '$lib/components/image/LocalImageModal.svelte';
 
     let screenshots = [], 
 	allscreenshots = [];
@@ -42,7 +44,9 @@
 				{#if allscreenshots.length}
 					<div class="grid grid-cols-2 gap-4">
 						{#each allscreenshots as screenshot}
-							<LocalImage src={screenshot.path} alt={screenshot.name}/>
+							<div class="hover:cursor-pointer" on:click={showComponent(LocalImageModal, { src: screenshot.path, alt: screenshot.name })}>
+								<LocalImage src={screenshot.path} alt={screenshot.name} />
+							</div>
 						{/each}
 					</div>
 				{:else}

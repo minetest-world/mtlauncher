@@ -131,7 +131,7 @@ export async function writeMergedConfig(version) {
         console.log(`No version specific config for ${version} found...`);
     }
 
-    res += `\n${writeConfigFile(get(configCache))}`;
+    res += `\n${writeConfigFile(get(await getConfig()))}`;
     try {
         await writeTextFile('minetest.merged.conf', res, {
             dir: BaseDirectory.App

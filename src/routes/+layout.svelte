@@ -15,6 +15,7 @@
 
     import TextBox from '$lib/components/element/form/TextBox.svelte';
     import Button from '$lib/components/element/form/Button.svelte';
+    import ModalContainer from '$lib/components/modal/ModalContainer.svelte';
     import Cog from '$lib/icon/Cog.svelte';
 
     let versions = [];
@@ -230,3 +231,4 @@
 		</div>
 	{/if}
 {/if}
+<ModalContainer />

@@ -1,6 +1,6 @@
 [package]
 name = "MTLauncher"
-version = "0.0.4"
+version = "0.0.5"
 description = "Alternative Minetest Launcher"
 authors = ["recluse4615"]
 license = "LGPL-2.0-only"
@@ -21,6 +21,9 @@ tauri = { version = "1.0.5", features = ["dialog-all", "fs-copy-file", "fs-creat
 reqwest = { version = "0.11"}
 zip = "*"
 zip-extensions = "*"
+
+[dependencies.tauri-plugin-fs-watch]
+git = "https://github.com/tauri-apps/tauri-plugin-fs-watch"
 
 [features]
 # by default Tauri runs in production mode

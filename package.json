@@ -1,6 +1,6 @@
 {
 	"name": "tauri-sveltekit",
-	"version": "0.0.4",
+	"version": "0.0.5",
 	"private": true,
 	"scripts": {
 		"dev": "npm run tauri dev",
@@ -30,6 +30,7 @@
 		"crypto-js": "^4.1.1",
 		"jszip": "^3.10.1",
 		"patch-package": "^6.4.7",
-		"svelte-markdown": "^0.2.3"
+		"svelte-markdown": "^0.2.3",
+		"tauri-plugin-fs-watch-api": "github:tauri-apps/tauri-plugin-fs-watch"
 	}
 }

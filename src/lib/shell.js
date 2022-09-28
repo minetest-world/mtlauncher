@@ -1,7 +1,7 @@
-import { Command, open } from "@tauri-apps/api/shell";
 import { type, arch } from '@tauri-apps/api/os';
 import { appDir } from "@tauri-apps/api/path";
 import { invoke } from '@tauri-apps/api/tauri';
+import { watchDebugLog, stopWatching } from '$lib/file/logger';
 
 import { writeMergedConfig } from '$lib/file/config';
 
@@ -78,14 +78,17 @@ export async function openWorld(worldName, version = '5.6.0') {
 }
 
 async function openMinetest(version, args) {
+    await stopWatching();
+
     let binary = await getBinaryLocation(version);
     let baseDir = await getVersionFolder(version);
+
+    let dir = await appDir();
 
     // add in the "merged" config if it exists & was written successfully
     let mergedConfigFile = await writeMergedConfig(version);
     if (mergedConfigFile) {
         console.log(`Applying merged config...`);
-        let dir = await appDir();
         args = [
             '--config',
             `${dir}/minetest.merged.conf`,
@@ -98,4 +101,6 @@ async function openMinetest(version, args) {
         contentDir: baseDir,
         args: args
     });
+
+    await watchDebugLog(version);
 }
