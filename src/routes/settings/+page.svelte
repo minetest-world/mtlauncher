@@ -22,7 +22,10 @@
 
     async function save() {
         console.log(changes);
-		$config = changes;
+		$config = {
+            ...$config,
+			...changes
+		};
 
         generated = writeConfigFile($config);
 	}
