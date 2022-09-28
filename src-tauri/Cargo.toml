@@ -1,10 +1,10 @@
 [package]
-name = "app"
-version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
-license = ""
-repository = ""
+name = "MTLauncher"
+version = "0.0.4"
+description = "Alternative Minetest Launcher"
+authors = ["recluse4615"]
+license = "GNU LGPL"
+repository = "https://github.com/minetest-world/mtlauncher.git"
 default-run = "app"
 edition = "2021"
 rust-version = "1.57"
