@@ -112,6 +112,10 @@
 		}
 	}
 
+	async function checkKeyInput(event){
+		if (event.keyCode == 13 && tempPass) login();
+	}
+
     async function doOpenServer(server, username, password, saveIdentity, version) {
         console.log(version);
         if (saveIdentity) {
@@ -130,6 +134,7 @@
 			<svelte:fragment slot="left">
 				<NavbarItem href="/news" label="News" />
 				<NavbarItem href="/games" label="Games" />
+        <NavbarItem href="/screenshots" label="Screenshots" />
 				<NavbarItem href="/servers" label="Play Online" />
 			</svelte:fragment>
 			<svelte:fragment slot="right">
@@ -212,7 +217,7 @@
 			</span>
 			<div class="w-64">
 				<div class="pb-4">
-					<TextBox bind:value={tempPass} isPassword placeholder="Password" />
+					<TextBox bind:value={tempPass} isPassword placeholder="Password" on:keypress={checkKeyInput}  />
 				</div>
 				<div class="flex w-full justify-end">
 					{#if tempPass}
