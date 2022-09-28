@@ -3,9 +3,9 @@ name = "MTLauncher"
 version = "0.0.4"
 description = "Alternative Minetest Launcher"
 authors = ["recluse4615"]
-license = "GNU LGPL"
-repository = "https://github.com/minetest-world/mtlauncher.git"
-default-run = "app"
+license = "LGPL-2.0-only"
+repository = "https://github.com/minetest-world/mtlauncher"
+default-run = "MTLauncher"
 edition = "2021"
 rust-version = "1.57"
 
