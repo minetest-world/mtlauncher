@@ -1,14 +1,11 @@
 <script>
+	import { onMount } from 'svelte';
+
 	import { getScreenshots } from '$lib/screenshots';
-    import { showComponent } from '$lib/modal';
-
-    import { onMount } from 'svelte';
-
     import { selectedVersion } from '$lib/stores';
-
+	
     import FullLoader from '$lib/components/FullLoader.svelte';
-	import LocalImage from '$lib/components/image/LocalImage.svelte';
-    import LocalImageModal from '$lib/components/image/LocalImageModal.svelte';
+	import ClickableLocalImage from '$lib/components/image/ClickableLocalImage.svelte';
 
     let screenshots = [], 
 	allscreenshots = [];
@@ -25,14 +22,14 @@
     });
 </script>
 <div class="pt-8">
-	{#if screenshots}
+	{#if allscreenshots}
 		<div class="px-64">
 			<div class="pb-16">
 				<h1 class="text-2xl font-bold pb-4">Screenshots for selected version</h1>
 				{#if screenshots.length}
 					<div class="grid grid-cols-2 gap-4">
 						{#each screenshots as screenshot}
-							<LocalImage src={screenshot.path} alt={screenshot.name}/>
+							<ClickableLocalImage src={screenshot.path} alt={screenshot.name}/>
 						{/each}
 					</div>
 				{:else}
@@ -44,9 +41,7 @@
 				{#if allscreenshots.length}
 					<div class="grid grid-cols-2 gap-4">
 						{#each allscreenshots as screenshot}
-							<div class="hover:cursor-pointer" on:click={showComponent(LocalImageModal, { src: screenshot.path, alt: screenshot.name })}>
-								<LocalImage src={screenshot.path} alt={screenshot.name} />
-							</div>
+							<ClickableLocalImage src={screenshot.path} alt={screenshot.name}/>
 						{/each}
 					</div>
 				{:else}

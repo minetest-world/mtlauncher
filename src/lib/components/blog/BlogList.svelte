@@ -13,11 +13,13 @@
 {#if posts}
 	{#each posts as post}
 		<div class="pt-4 pb-12">
-			{#if post.image}
-				<img src={post.image} class="w-1/2" />
-			{/if}
-			<h1 class="font-bold text-xl mt-4">{post.title}</h1>
-			<span class="text-neutral-300">on {new Date(post.date).toLocaleDateString()}</span>
+			<a href="{post.link}" target="_tauri">
+				{#if post.image}
+					<img src={post.image} alt='Image for {post.title}' class="w-1/2" />
+				{/if}
+				<h1 class="font-bold text-xl mt-4">{post.title}</h1>
+				<span class="text-neutral-300">on {new Date(post.date).toLocaleDateString()}</span>
+			</a>
 		</div>
 	{/each}
 {:else}
