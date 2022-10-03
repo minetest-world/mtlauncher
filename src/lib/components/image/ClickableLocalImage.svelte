@@ -1,8 +1,8 @@
 <script>
 	import { showComponent } from '$lib/modal';
 	import LocalImage from '$lib/components/image/LocalImage.svelte';
-    import LocalImageModal from '$lib/components/image/LocalImageModal.svelte';
-	
+	import LocalImageModal from '$lib/components/image/LocalImageModal.svelte';
+
 	export let src, alt;
 </script>
 	

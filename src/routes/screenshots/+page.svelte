@@ -2,24 +2,24 @@
 	import { onMount } from 'svelte';
 
 	import { getScreenshots } from '$lib/screenshots';
-    import { selectedVersion } from '$lib/stores';
+	import { selectedVersion } from '$lib/stores';
 	
-    import FullLoader from '$lib/components/FullLoader.svelte';
+	import FullLoader from '$lib/components/FullLoader.svelte';
 	import ClickableLocalImage from '$lib/components/image/ClickableLocalImage.svelte';
 
     let screenshots = [], 
 	allscreenshots = [];
-    onMount(async() => {
+	onMount(async() => {
 		selectedVersion.subscribe(async (val) => {
-            if (!val.installed) {
-                screenshots = [];
-                return;
+			if (!val.installed) {
+				screenshots = [];
+				return;
 			}
-
+		
 			screenshots = await getScreenshots(val.name);
-        });
+		});
 		allscreenshots = await getScreenshots();
-    });
+	});
 </script>
 <div class="pt-8">
 	{#if allscreenshots}
