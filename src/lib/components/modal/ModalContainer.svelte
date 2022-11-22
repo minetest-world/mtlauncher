@@ -1,5 +1,14 @@
 <script>
 	import { modal, close } from '$lib/modal';
+	
+	/*
+	function checkClose(event){
+		if (event.keyCode == 27 && $modal.visible) close();
+	}
+	Can be used in the future to check if users presses Esc key
+
+	'on:keypress={checkClose}'
+	*/
 </script>
 
 {#if $modal.visible}
