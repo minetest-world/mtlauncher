@@ -1,20 +1,20 @@
 <script>
 	import { getContent, getInstalledContent } from '$lib/api/contentdb';
-    import { onMount } from 'svelte';
+	import { onMount } from 'svelte';
 
-    import { goto } from '$app/navigation';
+	import { goto } from '$app/navigation';
+	import { derived } from 'svelte/store';
 
-    import { selectedVersion } from '$lib/stores';
+	import { selectedVersion } from '$lib/stores';
 
-    import FullLoader from '$lib/components/FullLoader.svelte';
-
-    let content;
+	import FullLoader from '$lib/components/FullLoader.svelte';
+	
+    let allcontent, content;
     let installedGames = [];
-    onMount(async() => {
-        content = await getContent();
-
-        // blah
-		$content = $content.filter(i => i.type === 'game');
+	onMount(async() => {
+        // Get games and sort by score
+        allcontent = await getContent();
+		content = derived(allcontent, $content => $content.filter(i => i.type === 'game').sort((packageA, packageB) => packageB.scoredata.score - packageA.scoredata.score));
 
         selectedVersion.subscribe(async (val) => {
             if (!val.installed) {

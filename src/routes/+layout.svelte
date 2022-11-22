@@ -12,11 +12,18 @@
     import { writable } from 'svelte/store';
 
     import ProfileSelector from '$lib/components/ProfileSelector.svelte';
-
+	import FullLoader from '$lib/components/FullLoader.svelte';
     import TextBox from '$lib/components/element/form/TextBox.svelte';
     import Button from '$lib/components/element/form/Button.svelte';
+	import Navbar from '$lib/components/nav/Navbar.svelte';
+	import NavbarItem from '$lib/components/nav/NavbarItem.svelte';
     import ModalContainer from '$lib/components/modal/ModalContainer.svelte';
     import Cog from '$lib/icon/Cog.svelte';
+	import Folder from '$lib/icon/Folder.svelte';
+	import VersionDropdown from './VersionDropdown.svelte';
+
+	import { getVersions, getInstalledVersions, openVersionFolder } from '$lib/api/versions';
+    import { downloadVersion, unzipVersion } from '$lib/api/download';
 
     let versions = [];
     let loading = true;
@@ -27,6 +34,10 @@
     let passwordAdded = false;
 
     let tempPass, tempConfirmPass;
+
+	let username = writable('');
+	let password = writable('');
+	let saveIdentity = writable(false);
 
     onMount(async() => {
         preferences = await getPreferences();
@@ -47,22 +58,6 @@
 
         loading = false;
 	})
-
-    import { getVersions, getInstalledVersions, openVersionFolder } from '$lib/api/versions';
-    import { downloadVersion, unzipVersion } from '$lib/api/download';
-
-    let username = writable('');
-    let password = writable('');
-    let saveIdentity = writable(false);
-
-    import Navbar from '$lib/components/nav/Navbar.svelte';
-    import NavbarItem from '$lib/components/nav/NavbarItem.svelte';
-
-    import VersionDropdown from './VersionDropdown.svelte';
-
-    import FullLoader from '$lib/components/FullLoader.svelte';
-
-    import Folder from '$lib/icon/Folder.svelte';
 
     async function install(version) {
         installing = true;
@@ -126,6 +121,10 @@
 
         await openServer(server, username, password, version.name);
 	}
+
+	async function checkJoinServer(event){
+		if (event.keyCode == 13) doOpenServer($selectedServer, $username, $password, $saveIdentity, $selectedVersion);
+	}
 </script>
 {#if loading}
 	<FullLoader />
@@ -135,11 +134,12 @@
 			<svelte:fragment slot="left">
 				<NavbarItem href="/news" label="News" />
 				<NavbarItem href="/games" label="Games" />
-        <NavbarItem href="/screenshots" label="Screenshots" />
-				<NavbarItem href="/servers" label="Play Online" />
+        		<NavbarItem href="/mods" label="Mods" />
+        		<NavbarItem href="/servers" label="Play Online" />
+				<NavbarItem href="/screenshots" label="Screenshots" />
 			</svelte:fragment>
 			<svelte:fragment slot="right">
-				<NavbarItem href="/settings">
+				<NavbarItem href="/settings" label="Settings">
 					<Cog />
 				</NavbarItem>
 			</svelte:fragment>
@@ -183,7 +183,7 @@
 				</div>
 				<div class="flex flex-col">
 					{#if $selectedServer.hasOwnProperty('address')}
-						<ProfileSelector username={username} password={password} saveIdentity={saveIdentity} />
+						<ProfileSelector username={username} password={password} saveIdentity={saveIdentity} on:keypress={checkJoinServer} />
 					{/if}
 				</div>
 			</div>

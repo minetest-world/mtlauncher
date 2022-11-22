@@ -176,3 +176,11 @@ body, html {
 .icon-slash:before {
     content: "\e90d";
 }
+.bg-red-500 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(185 16 16/ var(--tw-bg-opacity));
+}
+.hover\:bg-red-400:hover {
+    --tw-bg-opacity: 1;
+    background-color: rgb(211 16 16 / var(--tw-bg-opacity));
+}

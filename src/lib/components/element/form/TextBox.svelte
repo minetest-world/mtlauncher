@@ -1,12 +1,12 @@
 <script>
-	let clazz;
+	let clazz = null;
     export { clazz as class };
 
 	export let placeholder;
     export let isPassword = false;
     export let isNumber = false;
-    export let min, max;
-    export let value;
+    export let min = null, max = null;
+    export let value = null;
 </script>
 
 <div class={`${clazz || ''} bg-slate-600 py-1 px-2 flex items-center`}>
