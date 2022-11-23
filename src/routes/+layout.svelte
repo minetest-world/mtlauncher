@@ -139,7 +139,7 @@
 				<NavbarItem href="/screenshots" label="Screenshots" />
 			</svelte:fragment>
 			<svelte:fragment slot="right">
-				<NavbarItem href="/settings" label="Settings">
+				<NavbarItem href="/settings">
 					<Cog />
 				</NavbarItem>
 			</svelte:fragment>
