@@ -1,5 +1,5 @@
 <script>
-	export let checked;
+	export let checked = false;
     export let label;
 
     let slug;

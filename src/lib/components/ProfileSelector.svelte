@@ -69,11 +69,11 @@
 <div>
 	<div class="flex flex-row">
 		<div class="pr-1">
-			<TextBox placeholder="Username" bind:value={$username} />
+			<TextBox placeholder="Username" bind:value={$username} on:keypress />
 		</div>
 		<div class="pl-2">
 			<div class="flex flex-row justify-between">
-				<TextBox isPassword placeholder="Password" bind:value={$password} />
+				<TextBox isPassword placeholder="Password" bind:value={$password} on:keypress />
 				{#if !hasProfile}
 					<button on:click={() => generatePassword()} class="hover:text-emerald-500 hover:cursor-pointer pl-2" title="Generate Password">
 						<Key />
