@@ -56,13 +56,13 @@
 	<FullLoader />
 {:else}
 	<div class="h-96 flex bg-cover bg-center bg-no-repeat flex w-full" style={`background-image: url('${packageInfo.screenshots[0]}')`}>
-		<div class="flex flex-col p-4 bg-black/30">
-			<button class="flex flex-col px-2 bg-blue-500 hover:bg-emerald-400 hover:cursor-pointer" on:click={() => history.back()}>&lt;</button>
+		<div class="flex flex-col p-4 fixed">
+			<button class="flex flex-col px-2 py-2 bg-blue-500 hover:bg-emerald-400 hover:cursor-pointer icon-chevron-left" on:click={() => history.back()}/>
 		</div>
 		<div class="flex flex-col w-full p-4 bg-black/30 h-full justify-end pl-64 pr-64">
 			<div class="flex flex-row justify-between">
 				<div class="flex flex-col">
-					<div class="pb-4">
+					<div class="pb-4 tag-grid">
 						{#if 'WIP' === packageInfo.dev_state}
 							<Tag class="bg-blue-500" tag="Work in Progress" />
 						{/if}

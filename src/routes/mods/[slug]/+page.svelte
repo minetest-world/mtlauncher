@@ -11,7 +11,7 @@
 	let slug = $page.params.slug;
 
     import { selectedVersion } from '$lib/stores';
-    import { getPackageInfo, isInstalledForVersion, getDeplist } from '$lib/api/contentdb';
+    import { getPackageInfo, isInstalledForVersion, getDepList } from '$lib/api/contentdb';
     import { downloadAndUnzip } from '$lib/api/download';
     //import { openGame } from '$lib/shell';
 
@@ -25,7 +25,7 @@
 	let installing = false;
 	let currentinstalling = writable("");
 	let progress = writable(0);
-	let modstoinstall = [];
+	let modToInstall = [];
 	
     let [ author, pack ] = slug.split('@');
 
@@ -46,8 +46,8 @@
 		}
 
         isInstalled = await isInstalledForVersion(pack, 'mods', val.name);
-		for (let i in packageInfo.releasesdata){
-			let release = packageInfo.releasesdata[i];
+		for (let i in packageInfo.releases_data){
+			const release = packageInfo.releases_data[i];
 			if (release.min_minetest_version){
 				isSupported = release.min_minetest_version.protocol_version >= val.branch.protocolVersion;
 				if (isSupported && release.max_minetest_version) {
@@ -62,26 +62,25 @@
 
     async function install(version = '5.6.0') {
 		if (installing) return;
-		modstoinstall = await getDeplist(packageInfo, version);
-		modstoinstall.push(packageInfo);
+		modToInstall = await getDepList(packageInfo, version);
+		modToInstall.push(packageInfo);
 		
         installing = true;
 		progress.set(0);
-		let installedprogress = 0;
-		for (let i in modstoinstall) {
-			let installpackage = modstoinstall[i];
+		let installedProgress = 0;
+		for (const installPackage of modToInstall) {
 			progress.update(n => n + 1);
-			currentinstalling.set(installpackage.name);
+			currentinstalling.set(installPackage.name);
 			try {
-				await downloadAndUnzip(installpackage.url, `/versions/${version}/mods/${installpackage.name}`);
-				installedprogress += 1;
+				await downloadAndUnzip(installPackage.url, `/versions/${version}/mods/${installPackage.name}`);
+				installedProgress += 1;
 			}
 			catch (err) {
 				console.log(err);
 			}
 		}
         installing = false;
-		isInstalled = installedprogress == modstoinstall.length;
+		isInstalled = installedProgress == modToInstall.length;
 		return isInstalled;
 	}
 
@@ -117,14 +116,15 @@
 {#if !packageInfo}
 	<FullLoader />
 {:else}
-	<div class="h-96 flex bg-cover bg-center bg-no-repeat flex w-full" style={`background-image: url('${packageInfo.screenshots[0]}')`}>
-		<div class="flex flex-col p-4 bg-black/30">
-			<button class="flex flex-col px-2 bg-blue-500 hover:bg-emerald-400 hover:cursor-pointer" on:click={() => history.back()}>&lt;</button>
+	<div class="h-96 flex bg-cover bg-center bg-no-repeat flex w-full contentblock">
+		<img src="{packageInfo.screenshots[0]}" alt="Screenshot" class="backgroundimg" />
+		<div class="flex flex-col p-4 fixed">
+			<button class="flex flex-col px-2 py-2 bg-blue-500 hover:bg-emerald-400 hover:cursor-pointer icon-chevron-left" on:click={() => history.back()}/>
 		</div>
 		<div class="flex flex-col w-full p-4 bg-black/30 h-full justify-end pl-64 pr-64">
 			<div class="flex flex-row justify-between">
 				<div class="flex flex-col">
-					<div class="pb-4">
+					<div class="pb-4 tag-grid">
 						{#if 'WIP' === packageInfo.dev_state}
 							<Tag class="bg-blue-500" tag="Work in Progress" />
 						{/if}
@@ -162,7 +162,7 @@
 							{#if !isInstalled}
 							<button on:click={async () => await install($selectedVersion.name)} class="bg-emerald-500 hover:bg-emerald-400 p-4 font-bold text-white flex flex-col items-center">
 								{#if installing}
-									<div>Installing {$progress}/{modstoinstall.length} packages</div>
+									<div>Installing {$progress}/{modToInstall.length} packages</div>
 									<div class="font-medium text-sm">Current package "{$currentinstalling}"</div>
 								{:else}
 									<div>Install Mod</div>
