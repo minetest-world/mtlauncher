@@ -12,13 +12,13 @@
 
 {#if posts}
 	{#each posts as post}
-		<div class="pt-4 pb-12">
+		<a class="pt-4 pb-12 w-1/2 flex flex-col items-center hover:bg-darkest hover:cursor-pointer" href={`${post.link}?ref=mtlauncher`} target="_blank">
 			{#if post.image}
-				<img src={post.image} class="w-1/2" />
+				<img src={post.image} class="w-3/4" />
 			{/if}
 			<h1 class="font-bold text-xl mt-4">{post.title}</h1>
 			<span class="text-neutral-300">on {new Date(post.date).toLocaleDateString()}</span>
-		</div>
+		</a>
 	{/each}
 {:else}
 	<FullLoader />

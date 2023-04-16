@@ -65,7 +65,7 @@
     }
 </script>
 
-<div class="flex w-full justify-between py-4">
+<div class="flex w-full justify-between py-4 md:px-8">
 	<div>
 		<div class="bg-slate-600 py-1 px-2 flex items-center">
 			<Search />

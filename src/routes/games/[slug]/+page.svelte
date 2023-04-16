@@ -6,6 +6,9 @@
     import FullLoader from '$lib/components/FullLoader.svelte';
     import Link from '$lib/components/text/Link.svelte';
 
+    import ServerTable from '$lib/components/table/ServerTable.svelte';
+    import { selectedServer } from '$lib/stores';
+
 	import { page } from '$app/stores';
 	let slug = $page.params.slug;
 
@@ -14,8 +17,10 @@
     import { downloadAndUnzip } from '$lib/api/download';
     import { openGame } from '$lib/shell';
 
-    import { onMount } from 'svelte';
+    import { getServers } from '$lib/api/servers';
 
+    import { onMount } from 'svelte';
+	import { writable } from 'svelte/store';
 
     let packageInfo = false;
     let isInstalled = false;
@@ -25,9 +30,13 @@
 
     let [ author, pack ] = slug.split('@');
 
+    let validServers = writable([]);
+
     onMount(async() => {
         let slugParts = slug.split('@');
         packageInfo = await getPackageInfo(slugParts[0], slugParts[1]);
+        let servers = await getServers();
+        $validServers = servers.filter(i => i.gameid === pack);
         //isInstalled = await isInstalledForVersion(slugParts[1], 'games', $selectedVersion.name);
 	});
 
@@ -104,9 +113,13 @@
 
 		</div>
 	</div>
-	<div class="pl-64 pr-64 pt-8">
+	<div class="pl-64 pr-64 pt-8 pb-8">
 		<div class="markdown">
 			<SvelteMarkdown source={packageInfo.long_description} renderers={{ link: Link }} />
 		</div>
+	</div>
+	<div class="pl-64 pr-64 pt-8 pb-8">
+		<h2 class="text-xl font-bold md:px-8">Servers running this game</h2>
+		<ServerTable servers={validServers} selectedRow={selectedServer} />
 	</div>
 {/if}

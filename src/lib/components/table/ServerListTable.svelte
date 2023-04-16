@@ -21,11 +21,12 @@
     let preferences;
 
     let loading = true;
+    let prefSubscription = false;
     onMount(async() => {
         $servers = await getServers();
         preferences = await getPreferences();
 
-        preferences.subscribe(val => $favouriteServers = $servers.filter(i => val.favourites.servers.includes(`${i.address}:${i.port || 30000}`)));
+        prefSubscription = preferences.subscribe(val => $favouriteServers = $servers.filter(i => val.favourites.servers.includes(`${i.address}:${i.port || 30000}`)));
         loading = false;
 	});
 
@@ -52,13 +53,18 @@
     export let selectedRow = writable({});
     export let showFavourites = true;
 
-    onDestroy(() => $selectedRow = {});
+    onDestroy(() => {
+        $selectedRow = {};
+        if (prefSubscription !== false) {
+            prefSubscription();
+		}
+    });
 </script>
 {#if loading}
 	<FullLoader />
 {:else}
 	{#if showFavourites && $favouriteServers.length}
-	<h2 class="text-xl font-bold">Favourite Servers</h2>
+	<h2 class="text-xl font-bold md:px-8">Favourite Servers</h2>
 	<Table selectedRow={selectedRow} data={favouriteServers} columns={[
     {
         type: 'display',
@@ -137,7 +143,7 @@
 ]} />
 	{/if}
 
-	<h2 class="text-xl font-bold">All Servers</h2>
+	<h2 class="text-xl font-bold md:px-8">All Servers</h2>
 	<Table selectedRow={selectedRow} data={servers} columns={[
     {
         type: 'display',
