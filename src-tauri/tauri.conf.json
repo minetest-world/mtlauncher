@@ -28,7 +28,7 @@
       "protocol": {
         "asset": true,
         "assetScope": [
-          "$APP/versions/*"
+          "$APP/versions/**"
         ]
       },
       "fs": {
@@ -45,7 +45,7 @@
           "$APP/minetest.merged.conf",
           "$APP",
           "$APP/versions",
-          "$APP/versions/*",
+          "$APP/versions/**",
           "$APP/tmp.zip"
         ]
       },
