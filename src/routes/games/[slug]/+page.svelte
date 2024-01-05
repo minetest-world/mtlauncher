@@ -55,7 +55,8 @@
 {#if !packageInfo}
 	<FullLoader />
 {:else}
-	<div class="h-96 flex bg-cover bg-center bg-no-repeat flex w-full" style={`background-image: url('${packageInfo.screenshots[0]}')`}>
+	<div class="h-96 flex bg-cover bg-center bg-no-repeat flex w-full contentblock">
+		<img src="{packageInfo.screenshots[0]}" alt="Screenshot" class="backgroundimg" />
 		<div class="flex flex-col p-4 fixed">
 			<button class="flex flex-col px-2 py-2 bg-blue-500 hover:bg-emerald-400 hover:cursor-pointer icon-chevron-left" on:click={() => history.back()}/>
 		</div>
