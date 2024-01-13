@@ -6,29 +6,8 @@
 fn main() {
   tauri::Builder::default()
     .plugin(tauri_plugin_fs_watch::init())
-    .setup(|app| {
-      let discord_ipc_client = DeclarativeDiscordIpcClient::new("1193591167087034481");
-      discord_ipc_client.enable();
-
-      let _ = discord_ipc_client.set_activity(activity::Activity::new()
-        .state(&("Running MtLauncher ".to_owned() + &app.package_info().version.to_string()))
-        .details("Loading...")
-        .assets(activity::Assets::new().large_image("mtlauncher").large_text("MtLauncher"))
-      );
-
-      app.manage(discord_ipc_client);
-      Ok(())
-    })
-    .invoke_handler(tauri::generate_handler![open_minetest, download_and_unzip, download_file, set_activity, clear_activity])
+    .invoke_handler(tauri::generate_handler![open_minetest, download_and_unzip, download_file])
     .run(tauri::generate_context!())
-/*
-    .run(|app_handle: tauri::AppHandle, event| match event {
-      tauri::RunEvent::ExitRequested { } => {
-        clear_activity(app_handle.state<DeclarativeDiscordIpcClient>());
-      }
-      _ => {}
-    })
-*/
     .expect("error while running tauri application");
 }
 
@@ -44,11 +23,6 @@ use std::{io, fs};
 use std::io::prelude::*;
 
 //use zip_extensions::*;
-
-use declarative_discord_rich_presence::{activity,DeclarativeDiscordIpcClient};
-
-use tauri::State;
-use tauri::Manager;
 
 #[tauri::command]
 fn get_app_dir(app_handle: tauri::AppHandle) -> Option<PathBuf> {
@@ -152,28 +126,4 @@ fn open_minetest(loc: String, content_dir: String, args: Vec<String>) {
       .env("MINETEST_USER_PATH", content_dir)
       .args(args)
       .spawn();
-}
-
-#[tauri::command]
-async fn set_activity(details: String, version: Option<String>, running_mt: Option<bool>, app_handle: tauri::AppHandle, discord_ipc_client: State<'_, DeclarativeDiscordIpcClient>) -> Result<(), ()> {
-  let assets;
-  if running_mt.is_some() && running_mt.unwrap() == true {
-    assets = activity::Assets::new().small_image("mtlauncher").small_text(&("MtLauncher ".to_owned() + &app_handle.package_info().version.to_string())).large_image("minetest").large_text(&("Minetest ".to_owned() + &version.unwrap()));
-  } else {
-    assets = activity::Assets::new().large_image("mtlauncher").large_text(&("MtLauncher ".to_owned() + &app_handle.package_info().version.to_string()));
-  }
-  let _ = discord_ipc_client.set_activity(
-    activity::Activity::new()
-     .state(&("Running MtLauncher ".to_owned() + &app_handle.package_info().version.to_string()))
-     .details(&details)
-     .assets(assets)
-  );
-  Ok(())
-}
-
-
-#[tauri::command]
-async fn clear_activity(discord_ipc_client: State<'_, DeclarativeDiscordIpcClient>) -> Result<(), ()> {
-  let _ = discord_ipc_client.clear_activity();
-  Ok(())
 }
