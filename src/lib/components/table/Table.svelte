@@ -1,6 +1,7 @@
 <script>
 	import { createTable, Subscribe, Render, createRender } from 'svelte-headless-table';
     import { addSortBy, addPagination, addTableFilter, addSelectedRows } from 'svelte-headless-table/plugins';
+	import { _ } from 'svelte-i18n';
 
     import Chevron from '$lib/icon/Chevron.svelte';
     import Search from '$lib/icon/Search.svelte';
@@ -69,7 +70,7 @@
 	<div>
 		<div class="bg-slate-600 py-1 px-2 flex items-center">
 			<Search />
-			<input type="text" class="bg-transparent appearance-none border-0 ml-2 outline-none" bind:value={$filterValue} placeholder="Search..." />
+			<input type="text" class="bg-transparent appearance-none border-0 ml-2 outline-none" bind:value={$filterValue} placeholder={$_('general.search')} />
 		</div>
 
 	</div>
@@ -122,7 +123,7 @@
 	</tbody>
 </table>
 <div class="p-4 w-full flex justify-end flex-row">
-	<span class="block mx-4">{$pageIndex + 1} out of {$pageCount}</span>
+	<span class="block mx-4">{$_('serverlist.out_of', { values: { current: $pageIndex + 1, max: $pageCount } })}</span>
 	<span class="block mx-4 w-2" on:click={() => {
         if ($hasPreviousPage) $pageIndex--;
 	}} class:cursor-pointer={$hasPreviousPage} class:cursor-not-allowed={!$hasPreviousPage} class:text-neutral-600={!$hasPreviousPage}>

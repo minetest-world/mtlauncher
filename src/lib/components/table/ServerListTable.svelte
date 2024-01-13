@@ -15,6 +15,7 @@
 	import { writable } from 'svelte/store';
     import { onMount, onDestroy } from 'svelte';
     import {createRender} from "svelte-headless-table";
+	import { _ } from 'svelte-i18n';
 
     let servers = writable([]);
     let favouriteServers = writable([]);
@@ -58,7 +59,7 @@
 	<FullLoader />
 {:else}
 	{#if showFavourites && $favouriteServers.length}
-	<h2 class="text-xl font-bold">Favourite Servers</h2>
+	<h2 class="text-xl font-bold">{$_('serverlist.favourite_servers')}</h2>
 	<Table selectedRow={selectedRow} data={favouriteServers} columns={[
     {
         type: 'display',
@@ -88,7 +89,7 @@
         }
     },
 	{
-        header: 'Ping',
+        header: $_('serverlist.ping'),
         id: 'ping',
         accessor: (i) => ((i.ping || 0.9999) * 1000).toFixed(0),
         plugins: {
@@ -98,7 +99,7 @@
         }
 	},
 	{
-        header: 'Players',
+        header: $_('serverlist.players'),
         id: 'player_count',
         accessor: (i) => i,
         cell: ({ value }) => createRender(PlayerCount, {
@@ -115,11 +116,11 @@
         }
 	},
     {
-        header: 'Name',
+        header: $_('serverlist.name'),
         accessor: 'name'
 	},
 	{
-        header: 'Uptime',
+        header: $_('serverlist.uptime'),
         id: 'uptime',
         accessor: (i) => i,
         cell: ({ value }) => createRender(Time, {
@@ -137,7 +138,7 @@
 ]} />
 	{/if}
 
-	<h2 class="text-xl font-bold">All Servers</h2>
+	<h2 class="text-xl font-bold">{$_('serverlist.all_servers')}</h2>
 	<Table selectedRow={selectedRow} data={servers} columns={[
     {
         type: 'display',
@@ -167,7 +168,7 @@
         }
     },
 	{
-        header: 'Ping',
+        header: $_('serverlist.ping'),
         id: 'ping',
         accessor: (i) => ((i.ping || 0.9999) * 1000).toFixed(0),
         plugins: {
@@ -177,7 +178,7 @@
         }
 	},
 	{
-        header: 'Players',
+        header: $_('serverlist.players'),
         id: 'player_count',
         accessor: (i) => i,
         cell: ({ value }) => createRender(PlayerCount, {
@@ -194,11 +195,11 @@
         }
 	},
     {
-        header: 'Name',
+        header: $_('serverlist.name'),
         accessor: 'name'
 	},
 	{
-        header: 'Uptime',
+        header: $_('serverlist.uptime'),
         id: 'uptime',
         accessor: (i) => i,
         cell: ({ value }) => createRender(Time, {

@@ -1,4 +1,6 @@
 <script>
+	import { _ } from 'svelte-i18n';
+
 	export let seconds;
 
     function toReadableTime(time) {
@@ -15,14 +17,14 @@
 
             if (time >= timeframe) {
                 let ratio = time / timeframe;
-                res += `${ratio.toFixed(0)} ${conv}${ratio >= 2 ? 's' : ''}, `;
+                res += `${ratio.toFixed(0)} ${$_('time.' + conv + (ratio >= 2 ? 's' : ''))}, `;
 
                 time %= timeframe;
 			}
 		}
-        if ('' === res) return `${time} seconds`;
+        if ('' === res) return `${time} ${$_('time.seconds')}`;
 
-        return res;
+        return res.endsWith(', ') ? res.slice(0, res.length - 2) : res;
 	}
 </script>
 

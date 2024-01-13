@@ -3,6 +3,7 @@
     import { selectedServer } from '$lib/stores';
     import { onMount, onDestroy } from 'svelte';
 	import { writable } from 'svelte/store';
+	import { _ } from 'svelte-i18n';
 
 
     import TextBox from '$lib/components/element/form/TextBox.svelte';
@@ -69,13 +70,13 @@
 <div>
 	<div class="flex flex-row">
 		<div class="pr-1">
-			<TextBox placeholder="Username" bind:value={$username} />
+			<TextBox placeholder={$_('profile.username')} bind:value={$username} />
 		</div>
 		<div class="pl-2">
 			<div class="flex flex-row justify-between">
-				<TextBox isPassword placeholder="Password" bind:value={$password} />
+				<TextBox isPassword placeholder={$_('profile.password')} bind:value={$password} />
 				{#if !hasProfile}
-					<button on:click={() => generatePassword()} class="hover:text-emerald-500 hover:cursor-pointer pl-2" title="Generate Password">
+					<button on:click={() => generatePassword()} class="hover:text-emerald-500 hover:cursor-pointer pl-2" title={$_('profile.generate_password')}>
 						<Key />
 					</button>
 				{/if}
@@ -84,6 +85,6 @@
 	</div>
 
 	{#if !hasProfile}
-		<Checkbox bind:checked={$saveIdentity} label="Save Profile" />
+		<Checkbox bind:checked={$saveIdentity} label={$_('profile.save_profile')} />
 	{/if}
 </div>

@@ -9,7 +9,9 @@
 
     import { onMount } from 'svelte';
     import { hasUserdata, checkPassword, getUserdata, setServerIdentity } from '$lib/userdata';
+	import { showText } from '$lib/modal';
     import { writable } from 'svelte/store';
+	import { _ } from 'svelte-i18n';
 
     import ProfileSelector from '$lib/components/ProfileSelector.svelte';
 
@@ -78,11 +80,10 @@
 			//.finally(installing = false);
 	}
 
-    async function initFirstTime() {
-        if (tempPass !== tempConfirmPass) {
-            //TODO dialog api
-            alert('no');
-            return;
+	async function initFirstTime() {
+		if (tempPass !== tempConfirmPass) {
+			showText($_('lockscreen.passwords_no_match.title'), $_('lockscreen.passwords_no_match.content'));
+			return;
 		}
 
         loading = true;
@@ -107,9 +108,9 @@
             loading = false;
             passwordAdded = true;
         }
-        else {
-            alert('This password is invalid. Please try again.');
-            tempPass = '';
+		else {
+			showText($_('lockscreen.password_invalid.title'), $_('lockscreen.password_invalid.content'));
+			tempPass = '';
 		}
 	}
 
@@ -133,10 +134,10 @@
 	{#if passwordAdded}
 		<Navbar>
 			<svelte:fragment slot="left">
-				<NavbarItem href="/news" label="News" />
-				<NavbarItem href="/games" label="Games" />
-        <NavbarItem href="/screenshots" label="Screenshots" />
-				<NavbarItem href="/servers" label="Play Online" />
+				<NavbarItem href="/news" label={$_('navbar.news')} />
+				<NavbarItem href="/games" label={$_('navbar.games')} />
+				<NavbarItem href="/screenshots" label={$_('navbar.screenshots')} />
+				<NavbarItem href="/servers" label={$_('navbar.play_online')} />
 			</svelte:fragment>
 			<svelte:fragment slot="right">
 				<NavbarItem href="/settings">
@@ -153,7 +154,7 @@
 			<div class="w-full grid grid-cols-3 gap-4 px-8 py-4">
 				<div class="flex flex-col">
 					<div class="text-lg font-bold text-white pb-1">
-						<span class="mr-2">Current Version</span>
+						<span class="mr-2">{$_('general.current_version')}</span>
 						{#if $selectedVersion.installed}
 							<button class="hover:text-dark-green hover:cursor-pointer" on:click={() => openVersionFolder($selectedVersion.name)}>
 								<Folder />
@@ -167,16 +168,16 @@
 					{#if $selectedVersion.hasOwnProperty('installed') && !$selectedVersion.installed}
 						<button on:click={async () => await install($selectedVersion)} class="bg-emerald-500 hover:bg-emerald-400 p-4 font-bold text-white flex flex-col items-center">
 							{#if installing}
-								<div>Installing...</div>
-								<div class="font-medium text-sm">please be patient :)</div>
+								<div>{$_('general.installing.title')}</div>
+								<div class="font-medium text-sm">{$_('general.installing.subtitle')}</div>
 							{:else}
-								<div>Install</div>
-								<div class="font-medium text-sm">version {$selectedVersion.name}</div>
+								<div>{$_('general.install.title')}</div>
+								<div class="font-medium text-sm">{$_('general.version', { values: { version: $selectedVersion.name } })}</div>
 							{/if}
 						</button>
 					{:else if $selectedServer.hasOwnProperty('address')}
 						<button on:click={() => doOpenServer($selectedServer, $username, $password, $saveIdentity, $selectedVersion)} class="bg-emerald-500 hover:bg-emerald-400 p-4 font-bold text-white flex flex-col items-center">
-							<div>Play</div>
+							<div>{$_('general.play')}</div>
 							<div class="font-medium text-sm">{$selectedServer.address}:{$selectedServer.port || 30000}</div>
 						</button>
 					{/if}
@@ -190,21 +191,21 @@
 		</div>
 	{:else if firstStart}
 		<div class="w-full h-full flex items-center justify-center flex-col text-center">
-			<span class="text-2xl font-bold">First time?</span>
+			<span class="text-2xl font-bold">{$_('lockscreen.first_time.title')}</span>
 			<span class="w-96 py-4">
-					Welcome to the Minetest Launcher. Before we get started, you need to <strong>set a password</strong> to locally encrypt some sensitive settings (passwords for servers, etc.)
+					{@html $_('lockscreen.first_time.welcome')}
 			</span>
 			<div class="w-64">
 				<div class="pb-4">
-					<TextBox bind:value={tempPass} isPassword placeholder="Password" />
+					<TextBox bind:value={tempPass} isPassword placeholder={$_('lockscreen.password')} />
 				</div>
 				<div class="pb-4">
-					<TextBox bind:value={tempConfirmPass} isPassword placeholder="Confirm Password" />
+					<TextBox bind:value={tempConfirmPass} isPassword placeholder={$_('lockscreen.confirm_password')} />
 				</div>
 				<div class="flex w-full justify-end">
 					{#if (tempConfirmPass && tempPass) && tempConfirmPass === tempPass}
 						<Button on:click={() => initFirstTime()} class="bg-emerald-500 hover:bg-emerald-400 py-2 rounded-md">
-							Set
+							{$_('lockscreen.set')}
 						</Button>
 					{/if}
 				</div>
@@ -212,18 +213,18 @@
 		</div>
 	{:else}
 		<div class="w-full h-full flex items-center justify-center flex-col text-center">
-			<span class="text-2xl font-bold">Login</span>
+			<span class="text-2xl font-bold">{$_('lockscreen.login')}</span>
 			<span class="w-96 py-4">
-				Welcome to the Minetest Launcher. Please enter your password to decrypt your user data.
+				{$_('lockscreen.welcome')}
 			</span>
 			<div class="w-64">
 				<div class="pb-4">
-					<TextBox bind:value={tempPass} isPassword placeholder="Password" on:keypress={checkKeyInput}  />
+					<TextBox bind:value={tempPass} isPassword placeholder={$_('lockscreen.password')} on:keypress={checkKeyInput}  />
 				</div>
 				<div class="flex w-full justify-end">
 					{#if tempPass}
 						<Button on:click={() => login()} class="bg-emerald-500 hover:bg-emerald-400 py-2 rounded-md">
-							Login
+							{$_('lockscreen.login')}
 						</Button>
 					{/if}
 				</div>

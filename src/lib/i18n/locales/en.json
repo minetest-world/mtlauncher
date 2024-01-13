@@ -1,5 +1,151 @@
 {
+  "general": {
+    "loading": "Loading...",
+    "installing": {
+      "title": "Installing...",
+      "subtitle": "please be patient :)"
+    },
+    "install": {
+      "title": "Install"
+    },
+    "version": "version {version}",
+    "for_version": "for {version}",
+    "play": "Play",
+    "address": "Address",
+    "current_version": "Current Version",
+    "image_for": "Image for {thing}",
+    "search": "Search..."
+  },
+  "lockscreen": {
+    "set": "Set",
+    "password": "Password",
+    "confirm_password": "Confirm Password",
+    "login": "Login",
+    "welcome": "Welcome to the Minetest Launcher. Please enter your password to decrypt your user data.",
+    "first_time": {
+      "title": "First time?",
+      "welcome": "Welcome to the Minetest Launcher. Before we get started, you need to <strong>set a password</strong> to locally encrypt some sensitive settings (passwords for servers, etc.)"
+    },
+    "passwords_no_match": {
+      "title": "Passwords don't match",
+      "content": "The entered passwords don't match. Please try again."
+    },
+    "password_invalid": {
+      "title": "Password Invalid",
+      "content": "This password is invalid. Please try again."
+    }
+  },
+  "navbar": {
+    "news": "News",
+    "worlds": "Worlds",
+    "games": "Games",
+    "mods": "Mods",
+    "play_online": "Play Online",
+    "screenshots": "Screenshots"
+  },
   "home": {
     "welcome": "Welcome to MTLauncher"
+  },
+  "profile": {
+    "username": "Username",
+    "password": "Password",
+    "generate_password": "Generate Password",
+    "save_profile": "Save Profile"
+  },
+  "serverlist": {
+    "all_servers": "All Servers",
+    "favourite_servers": "Favourite Servers",
+    "ping": "Ping",
+    "players": "Players",
+    "name": "Name",
+    "uptime": "Uptime",
+    "out_of": "{current} out of {max}"
+  },
+  "news": {
+    "on_date": "Posted on {date}"
+  },
+  "content": {
+    "by_author": "By {author}",
+    "supports_version": "Supports version <strong>{version}</strong>",
+    "tags": {
+      "wip": "Work in Progress"
+    }
+  },
+  "games": {
+    "all_games": "All Games",
+    "installed_games": "Installed Games",
+    "install_game": "Install Game",
+    "launch_game": "Launch Game"
+  },
+  "mods": {
+    "all_mods": "All Mods",
+    "installed_mods": "Installed Mods",
+    "install_mod": "Install Mod",
+    "delete_mod": "Delete Mod",
+    "toggle_mod": "Toggle Mod",
+    "required_dependencies": "Required Dependencies:",
+    "installing_status": "Installing {progress}/{max} packages",
+    "current_package": "Current Package \"{package}\""
+  },
+  "screenshots": {
+    "all_screenshots": "All Screenshots",
+    "for_selected_version": "Screenshots for selected version",
+    "no_screenshots": "No Screenshots"
+  },
+  "settings": {
+    "title": "Minetest Settings",
+    "note": "These settings get applied to <em>all</em> versions of Minetest.",
+    "save": "Save!",
+    "nodes": {
+      "screen": {
+        "title": "Screen",
+        "fullscreen": {
+          "name": "Fullscreen",
+          "description": "Whether or not the game window is fullscreen"
+        },
+        "screen_w": {
+          "name": "Screen Width",
+          "description": "The width of the game window, ignored when fullscreen = true"
+        },
+        "screen_h": {
+          "name": "Screen Height",
+          "description": "The height of the game window, ignored when fullscreen = true"
+        },
+        "pause_on_lost_focus": {
+          "name": "Pause on lost focus",
+          "description": "Whether or not to pause the game when another window is active."
+        },
+        "fps_max": {
+          "name": "FPS Max",
+          "description": "Limit of FPS (frames per second)"
+        },
+        "vsync": {
+          "name": "VSync",
+          "description": "Vertical screen synchronisation"
+        }
+      },
+      "controls": {
+        "title": "Controls",
+        "mouse_sensitivity": {
+          "name": "Mouse Sensitivity",
+          "description": "The sensitivity of your mouse. Higher = faster mouse movements"
+        },
+        "invert_mouse": {
+          "name": "Invert Mouse",
+          "description": "Invert vertical mouse movement"
+        }
+      }
+    }
+  },
+  "time": {
+    "year": "year",
+    "years": "years",
+    "day": "day",
+    "days": "days",
+    "hour": "hour",
+    "hours": "hours",
+    "minute": "minute",
+    "minutes": "minutes",
+    "seconds": "seconds"
   }
 }
