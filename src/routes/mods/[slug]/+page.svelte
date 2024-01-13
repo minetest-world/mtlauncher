@@ -103,12 +103,12 @@
 							{#if isSupported == true}
 								<Check class="bg-emerald-500 w-6 h-6 mr-2" circle=true />
 								<span>
-									Supports version <strong>{$selectedVersion.name}</strong>
+									{@html $_('content.supports_version', { values: { version: $selectedVersion.name } })}
 								</span>
 							{:else}
 								<Plus class="bg-red-500 w-6 h-6 mr-2 rotate-45" circle=true />
 								<span>
-									Supports version <strong>{$selectedVersion.name}</strong>
+									{@html $_('content.supports_version', { values: { version: $selectedVersion.name } })}
 								</span>
 							{/if}
 						</div>
@@ -118,11 +118,11 @@
 							{#if !$isInstalled}
 							<button on:click={async () => !$installing && (await installMod(packageInfo, $selectedVersion.name))} class="bg-emerald-500 hover:bg-emerald-400 p-4 font-bold text-white flex flex-col items-center">
 								{#if $installing}
-									<div>Installing {$progress}/{$modsToInstall.length} packages</div>
-									<div class="font-medium text-sm">Current package "{$currentInstalling}"</div>
+									<div>{$_('mods.installing_status', { values: { progress: $progress, max: $modsToInstall.length } })}</div>
+									<div class="font-medium text-sm">{$_('mods.current_package', { values: { package: $currentInstalling } })}</div>
 								{:else}
-									<div>Install Mod</div>
-									<div class="font-medium text-sm">for {$selectedVersion.name}</div>
+									<div>{$_('mods.install_mod')}</div>
+									<div class="font-medium text-sm">{$_('general.for_version', { values: { version: $selectedVersion.name } })}</div>
 								{/if}
 							</button>
 							{:else}

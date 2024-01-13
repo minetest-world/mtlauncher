@@ -1,45 +1,39 @@
 import {BaseDirectory, readTextFile, writeTextFile} from '@tauri-apps/api/fs';
 import { fileBackedStore } from '$lib/preferences';
 import { get } from 'svelte/store';
+import { _ } from 'svelte-i18n';
 
 const KV_REGEX = /\s*(?<key>[a-z_]+)\s?=\s?(?<val>.*)/;
 
 export const CONFIG_NODES = {
-    'Screen': {
+    'screen': {
         'fullscreen': {
-            description: 'Whether or not the game window is fullscreen',
             type: 'bool'
         },
         'screen_w': {
-            description: 'The width of the game window, ignored when fullscreen = true',
             type: 'int',
             min: 1,
             max: 65535,
         },
         'screen_h': {
-            description: 'The height of the game window, ignored when fullscreen = true',
             type: 'int',
             min: 1,
             max: 65535,
         },
         'pause_on_lost_focus': {
-            description: 'Whether or not to pause the game when another window is active.',
             type: 'bool'
         },
         'fps_max': {
-            description: 'Limit of FPS (frames per second)',
             type: 'int',
             min: 1,
             max: 360
         },
         'vsync': {
-            description: 'Vertical screen synchronisation',
             type: 'bool'
         }
     },
-    'Controls': {
+    'controls': {
         'mouse_sensitivity': {
-            description: 'The sensitivity of your mouse. Higher = faster mouse movements',
             type: 'float',
             min: 0.1,
             max: 10,
@@ -47,7 +41,6 @@ export const CONFIG_NODES = {
             range: true
         },
         'invert_mouse': {
-            description: 'Invert vertical mouse movement',
             type: 'bool'
         }
     }

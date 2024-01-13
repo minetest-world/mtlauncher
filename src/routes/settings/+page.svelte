@@ -1,5 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
+	import { _ } from 'svelte-i18n';
 
     import { getConfig, writeConfigFile, CONFIG_NODES } from '$lib/file/config';
 
@@ -34,22 +35,22 @@
 	{#if generated}
 		<pre class="bg-gray-700 mb-8">{generated}</pre>
 	{/if}
-	<h1 class="text-4xl font-bold py-4">Minetest Settings</h1>
+	<h1 class="text-4xl font-bold py-4">{$_('settings.title')}</h1>
 	<span class="pb-4">
-		These settings get applied to <em>all</em> versions of Minetest.
+		{@html $_('settings.note')}
 	</span>
 	{#if config}
 		{#each Object.keys(CONFIG_NODES) as section}
-			<h2 class="text-3xl font-bold pt-4 pb-0">{section}</h2>
+			<h2 class="text-3xl font-bold pt-4 pb-0">{$_(`settings.nodes.${section}.title`)} ({section})</h2>
 			{#each Object.keys(CONFIG_NODES[section]) as key}
 			<div class="flex flex-row justify-between py-4">
 				<div class="flex flex-col">
-					<span class="font-bold">{key}
+					<span class="font-bold">{$_(`settings.nodes.${section}.${key}.name`)}
 						{#if changes.hasOwnProperty(key)}
 						= {changes[key]}
 						{/if}
 					</span>
-					<span>{CONFIG_NODES[section][key].description}</span>
+					<span>{$_(`settings.nodes.${section}.${key}.description`)}</span>
 				</div>
 				<div>
 					{#if ['float', 'int'].includes(CONFIG_NODES[section][key].type) && CONFIG_NODES[section][key].hasOwnProperty('range')}
@@ -67,9 +68,9 @@
 			{/each}
 		{/each}
 		<Button on:click={async () => await save()} class="bg-emerald-500 hover:bg-emerald-400 p-4 font-bold text-white flex flex-col items-center">
-			Save!
+			{$_('settings.save')}
 		</Button>
 	{:else}
-		Loading...
+		{$_('general.loading')}
 	{/if}
 </div>

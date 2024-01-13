@@ -1,6 +1,7 @@
 <script>
 	import { filterAllContent, getInstalledContent } from '$lib/api/contentdb';
 	import { onMount } from 'svelte';
+	import { _ } from 'svelte-i18n';
 
 	import { goto } from '$app/navigation';
 	
@@ -34,29 +35,29 @@
 		<div class="px-64">
 			{#if installedGames.length}
 				<div class="pb-16">
-					<h1 class="text-2xl font-bold pb-4">Installed Games</h1>
+					<h1 class="text-2xl font-bold pb-4">{$_('games.installed_games')}</h1>
 					<div class="grid grid-cols-2 gap-4">
 						{#each installedGames as item}
 							<div class="flex h-48 contentblock">
 								<img src="{item.thumbnail}" alt="Thumbnail" class="backgroundimg" />
-								<div on:click={() => goto(`/games/${item.slug}`)} class="flex flex-col w-full p-4 bg-black/50 h-full justify-end hover:bg-black/60 hover:cursor-pointer">
+								<button type="button" on:click={() => goto(`/games/${item.slug}`)} class="flex flex-col w-full p-4 bg-black/50 h-full justify-end hover:bg-black/60 hover:cursor-pointer">
 									<span class="text-xl font-bold">{item.title}</span>
-									<span>by {item.author}</span>
-								</div>
+									<span>{$_('content.by_author', { values: { author: item.author } })}</span>
+								</button>
 							</div>
 						{/each}
 					</div>
 				</div>
 			{/if}
-			<h1 class="text-2xl font-bold pb-4">All Games</h1>
+			<h1 class="text-2xl font-bold pb-4">{$_('games.all_games')}</h1>
 			<div class="grid grid-cols-2 gap-4">
 				{#each $content as item}
 					<div class="flex h-48 contentblock">
 						<img src="{item.thumbnail}" alt="Thumbnail" class="backgroundimg" />
-						<div on:click={() => goto(`/games/${item.slug}`)} class="flex flex-col w-full p-4 bg-black/50 h-full justify-end hover:bg-black/60 hover:cursor-pointer">
+						<button type="button" on:click={() => goto(`/games/${item.slug}`)} class="flex flex-col w-full p-4 bg-black/50 h-full justify-end hover:bg-black/60 hover:cursor-pointer">
 							<span class="text-xl font-bold">{item.title}</span>
-							<span>by {item.author}</span>
-						</div>
+							<span>{$_('content.by_author', { values: { author: item.author } })}</span>
+						</button>
 					</div>
 				{/each}
 			</div>

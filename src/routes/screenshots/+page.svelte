@@ -1,5 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
+	import { _ } from 'svelte-i18n';
 
 	import { getScreenshots } from '$lib/screenshots';
 	import { selectedVersion } from '$lib/stores';
@@ -25,7 +26,7 @@
 	{#if allscreenshots}
 		<div class="px-64">
 			<div class="pb-16">
-				<h1 class="text-2xl font-bold pb-4">Screenshots for selected version</h1>
+				<h1 class="text-2xl font-bold pb-4">{$_('screenshots.for_selected_version')}</h1>
 				{#if screenshots.length}
 					<div class="grid grid-cols-2 gap-4">
 						{#each screenshots as screenshot}
@@ -33,11 +34,11 @@
 						{/each}
 					</div>
 				{:else}
-					<span>No screenshots</span>
+					<span>{$_('screenshots.no_screenshots')}</span>
 				{/if}
 			</div>
 			<div class="pb-16">
-				<h1 class="text-2xl font-bold pb-4">All Screenshots</h1>
+				<h1 class="text-2xl font-bold pb-4">{$_('screenshots.all_screenshots')}</h1>
 				{#if allscreenshots.length}
 					<div class="grid grid-cols-2 gap-4">
 						{#each allscreenshots as screenshot}
@@ -45,7 +46,7 @@
 						{/each}
 					</div>
 				{:else}
-					<span>No screenshots</span>
+					<span>{$_('screenshots.no_screenshots')}</span>
 				{/if}
 			</div>
 		</div>

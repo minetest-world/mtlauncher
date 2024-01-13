@@ -3,6 +3,7 @@
 	import Check from '$lib/icon/Check.svelte';
 	import Plus from '$lib/icon/Plus.svelte';
 	import SvelteMarkdown from 'svelte-markdown';
+	import { _ } from 'svelte-i18n';
 
 	import FullLoader from '$lib/components/FullLoader.svelte';
 	import Link from '$lib/components/text/Link.svelte';
@@ -61,6 +62,7 @@
 		}
 		installing = false;
 	}
+
 </script>
 
 {#if !packageInfo}
@@ -76,14 +78,14 @@
 				<div class="flex flex-col">
 					<div class="pb-4 tag-grid">
 						{#if 'WIP' === packageInfo.dev_state}
-							<Tag class="bg-blue-500" tag="Work in Progress" />
+							<Tag class="bg-blue-500" tag={$_('content.tags.wip')} />
 						{/if}
 						{#each packageInfo.tags as tag}
 							<Tag class="bg-blue-500" tag={tag} />
 						{/each}
 					</div>
 					<span class="text-2xl font-bold">{packageInfo.title}</span>
-					<span>by {packageInfo.author}</span>
+					<span>{$_('content.by_author', { values: { author: packageInfo.author } })}</span>
 				</div>
 				<div class="flex flex-col items-end justify-end">
 					{#if isSupported != null}
@@ -91,12 +93,12 @@
 							{#if isSupported == true}
 								<Check class="bg-emerald-500 w-6 h-6 mr-2" circle=true />
 								<span>
-									Supports version <strong>{$selectedVersion.name}</strong>
+									{@html $_('content.supports_version', { values: { version: $selectedVersion.name } })}
 								</span>
 							{:else}
 								<Plus class="bg-red-500 w-6 h-6 mr-2 rotate-45" circle=true />
 								<span>
-									Does not support version <strong>{$selectedVersion.name}</strong>
+									{@html $_('content.not_supports_version', { values: { version: $selectedVersion.name } })}
 								</span>
 							{/if}
 						</div>
@@ -106,17 +108,17 @@
 							{#if !isInstalled}
 							<button on:click={async () => await install(packageInfo.url, $selectedVersion, pack)} class="bg-emerald-500 hover:bg-emerald-400 p-4 font-bold text-white flex flex-col items-center">
 								{#if installing}
-									<div>Installing...</div>
-									<div class="font-medium text-sm">please be patient :)</div>
+									<div>{$_('general.installing.title')}</div>
+									<div class="font-medium text-sm">{$_('general.installing.subtitle')}</div>
 								{:else}
-									<div>Install Game</div>
-									<div class="font-medium text-sm">for {$selectedVersion.name}</div>
+									<div>{$_('games.install_game')}</div>
+									<div class="font-medium text-sm">{$_('general.for_version', { values: { version: $selectedVersion.name } })}</div>
 								{/if}
 							</button>
 							{:else}
 								<button on:click={async () => await openGame(pack, $selectedVersion.name)} class="bg-emerald-500 hover:bg-emerald-400 p-4 font-bold text-white flex flex-col items-center">
-									<div>Launch Game</div>
-									<div class="font-medium text-sm">version {$selectedVersion.name}</div>
+									<div>{$_('games.launch_game')}</div>
+									<div class="font-medium text-sm">{$_('general.version', { values: { version: $selectedVersion.name } })}</div>
 								</button>
 							{/if}
 						{/if}
