@@ -17,6 +17,7 @@
     export let username = writable('');
     export let password = writable('');
     export let saveIdentity = writable(true);
+	export let onEnterPressed = () => {};
 
     onMount(async() => {
         profiles = await getUserdata();
@@ -65,16 +66,20 @@
 
         $password = res;
 	}
+
+	function doKeypress(e) {
+		if ($username.length && $password.length && e.keyCode === 13) onEnterPressed();
+	}
 </script>
 
 <div>
 	<div class="flex flex-row">
 		<div class="pr-1">
-			<TextBox placeholder={$_('profile.username')} bind:value={$username} on:keypress />
+			<TextBox placeholder={$_('profile.username')} bind:value={$username} on:keypress={doKeyPress} />
 		</div>
 		<div class="pl-2">
 			<div class="flex flex-row justify-between passwordField">
-				<TextBox isPassword placeholder={$_('profile.password')} bind:value={$password} on:keypress />
+				<TextBox isPassword placeholder={$_('profile.password')} bind:value={$password} on:keypress={doKeyPress} />
 				{#if !hasProfile}
 					<button on:click={() => generatePassword()} class="hover:text-emerald-500 hover:cursor-pointer pl-2" title={$_('profile.generate_password')}>
 						<Key />

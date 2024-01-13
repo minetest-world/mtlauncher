@@ -185,7 +185,7 @@
 				</div>
 				<div class="flex flex-col">
 					{#if $selectedServer.hasOwnProperty('address')}
-						<ProfileSelector username={username} password={password} saveIdentity={saveIdentity} on:keypress={checkJoinServer} />
+						<ProfileSelector username={username} password={password} saveIdentity={saveIdentity} onEnterPressed={checkJoinServer} />
 					{/if}
 				</div>
 			</div>
