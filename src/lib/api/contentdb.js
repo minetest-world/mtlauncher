@@ -1,6 +1,7 @@
 import {fetch as tFetch, ResponseType} from '@tauri-apps/api/http';
 import {BaseDirectory, readDir} from "@tauri-apps/api/fs";
 import { writable, get, derived } from 'svelte/store';
+import { getInstalledVersions } from '$lib/api/versions';
 
 let contentCache = writable([]);
 export async function getContent(forceReload = false) {
@@ -75,11 +76,14 @@ export async function isInstalledForVersion(pack, type, version = '5.6.0') {
 }
 
 export async function getInstalledContent(type, version = '5.6.0') {
-    let entries = await readDir(`versions/${version}/${type}`, {
-        dir: BaseDirectory.App,
-        recursive: false
-    });
-    return entries.map(ent => ent.name);
+    if ((await getInstalledVersions()).includes(version)) {
+        let entries = await readDir(`versions/${version}/${type}`, {
+            dir: BaseDirectory.App,
+            recursive: false
+        });
+        return entries.map(ent => ent.name);
+    }
+    return [];
 }
 
 export async function getDepList(packageInfo, version = '5.6.0', all=false) {
@@ -103,4 +107,21 @@ export async function filterAllContent(type = 'game') {
     // Get content, filter by type (without editing the content writable) and sort by score
     let allcontent = await getContent();
     return derived(allcontent, $content => $content.filter(i => i.type === type).sort((packageA, packageB) => packageB.score_data.score - packageA.score_data.score));
+}
+
+export function isSupportedForVersion(packageInfo, version) {
+	let isSupported = null;
+	for (let i in packageInfo.releases_data){
+		const release = packageInfo.releases_data[i];
+		if (release.min_minetest_version){
+			isSupported = version.branch.protocolVersion >= release.min_minetest_version.protocol_version;
+			if (isSupported && release.max_minetest_version) {
+				isSupported = version.branch.protocolVersion <= release.max_minetest_version.protocol_version;
+			}
+		} else if (release.max_minetest_version) {
+			isSupported = version.branch.protocolVersion <= release.max_minetest_version.protocol_version;
+		}
+		if (isSupported) break;
+	}
+	return isSupported;
 }

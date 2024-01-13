@@ -29,14 +29,15 @@ export async function getVersions(forceReload = false) {
         }
 
         let versions;
+        const fetchOptions = { headers: { "User-Agent": "MTLauncher" } };
         switch (platform) {
             case 'Linux':
-                versions = await tFetch(`https://api.github.com/repos/An0n3m0us/Minetest-AppImages/releases`);
+                versions = await tFetch(`https://api.github.com/repos/An0n3m0us/Minetest-AppImages/releases`, fetchOptions);
                 break;
 
             case 'Darwin':
             case 'Windows_NT':
-                versions = await tFetch('https://api.github.com/repos/minetest/minetest/releases');
+                versions = await tFetch('https://api.github.com/repos/minetest/minetest/releases', fetchOptions);
                 break;
         }
 

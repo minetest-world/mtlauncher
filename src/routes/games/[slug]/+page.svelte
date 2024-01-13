@@ -1,54 +1,65 @@
 <script>
 	import Tag from '$lib/components/text/Tag.svelte';
-    import Check from '$lib/icon/Check.svelte';
-    import SvelteMarkdown from 'svelte-markdown';
+	import Check from '$lib/icon/Check.svelte';
+	import Plus from '$lib/icon/Plus.svelte';
+	import SvelteMarkdown from 'svelte-markdown';
 
-    import FullLoader from '$lib/components/FullLoader.svelte';
-    import Link from '$lib/components/text/Link.svelte';
+	import FullLoader from '$lib/components/FullLoader.svelte';
+	import Link from '$lib/components/text/Link.svelte';
 
 	import { page } from '$app/stores';
 	let slug = $page.params.slug;
 
-    import { selectedVersion } from '$lib/stores';
-    import { getPackageInfo, isInstalledForVersion } from '$lib/api/contentdb';
-    import { downloadAndUnzip } from '$lib/api/download';
-    import { openGame } from '$lib/shell';
+	import { selectedVersion } from '$lib/stores';
+	import { getPackageInfo, isInstalledForVersion, isSupportedForVersion } from '$lib/api/contentdb';
+	import { downloadAndUnzip } from '$lib/api/download';
+	import { openGame } from '$lib/shell';
+	import { showText } from '$lib/modal';
 
-    import { onMount } from 'svelte';
+	import { onMount } from 'svelte';
 
 
-    let packageInfo = false;
-    let isInstalled = false;
-    let isSupported = true; //TODO: figure out a way to do this...
+	let packageInfo = false;
+	let isInstalled = false;
+	let isSupported = null; // false = NO, null = MAYBE, true = YES
 
 	let installing = false;
 
-    let [ author, pack ] = slug.split('@');
+	let [ author, pack ] = slug.split('@');
 
-    onMount(async() => {
-        let slugParts = slug.split('@');
-        packageInfo = await getPackageInfo(slugParts[0], slugParts[1]);
-        //isInstalled = await isInstalledForVersion(slugParts[1], 'games', $selectedVersion.name);
+	onMount(async() => {
+		let slugParts = slug.split('@');
+		packageInfo = await getPackageInfo(slugParts[0], slugParts[1]);
+
+		if ($selectedVersion.installed) {
+	 		isInstalled = await isInstalledForVersion(slugParts[1], 'games', $selectedVersion.name);
+			isSupported = isSupportedForVersion(packageInfo, $selectedVersion);
+		}
 	});
 
-    selectedVersion.subscribe(async(val) => {
-        if (!val.installed) return;
+	selectedVersion.subscribe(async(val) => {
+		if (!val.installed) {
+			isSupported = null;
+			return;
+		}
 
-        isInstalled = await isInstalledForVersion(pack, 'games', val.name);
+		isInstalled = await isInstalledForVersion(pack, 'games', val.name);
+		isSupported = isSupportedForVersion(packageInfo, val);
 	});
 
-    async function install(url, version, name) {
-        if (installing) return;
+	async function install(url, version, name) {
+		if (installing) return;
 
-        installing = true;
-        try {
-            await downloadAndUnzip(url, `/versions/${version.name}/games/${name}`);
-            isInstalled = true;
+		installing = true;
+		try {
+			await downloadAndUnzip(url, `/versions/${version.name}/games/${name}`);
+			isInstalled = true;
 		}
-        catch (err) {
-            console.log(err);
+		catch (err) {
+			showText(err);
+			console.log(err);
 		}
-        installing = false;
+		installing = false;
 	}
 </script>
 
@@ -75,12 +86,19 @@
 					<span>by {packageInfo.author}</span>
 				</div>
 				<div class="flex flex-col items-end justify-end">
-					{#if isSupported}
+					{#if isSupported != null}
 						<div class="flex flex-row">
-							<Check class="bg-emerald-500 w-6 h-6 mr-2" circle=true />
-							<span>
-								Supports version <strong>{$selectedVersion.name}</strong>
-							</span>
+							{#if isSupported == true}
+								<Check class="bg-emerald-500 w-6 h-6 mr-2" circle=true />
+								<span>
+									Supports version <strong>{$selectedVersion.name}</strong>
+								</span>
+							{:else}
+								<Plus class="bg-red-500 w-6 h-6 mr-2 rotate-45" circle=true />
+								<span>
+									Does not support version <strong>{$selectedVersion.name}</strong>
+								</span>
+							{/if}
 						</div>
 					{/if}
 					<div class="pt-4">
