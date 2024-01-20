@@ -7,6 +7,7 @@
     import Option from '$lib/components/element/dropdown/Option.svelte';
 
     import Chevron from '$lib/icon/Chevron.svelte';
+	let toggled;
 
 	let versions = [];
     onMount(async() => {

@@ -1,0 +1,152 @@
+{
+  "general": {
+    "loading": "Laden...",
+    "installing": {
+      "title": "Installeren...",
+      "subtitle": "een moment gedult :)"
+    },
+    "install": {
+      "title": "Installeer"
+    },
+    "version": "versie {version}",
+    "for_version": "voor {version}",
+    "play": "Speel",
+    "address": "Adres",
+    "current_version": "Huidige Versie",
+    "image_for": "Afbeelding voor {thing}",
+    "search": "Zoek..."
+  },
+  "lockscreen": {
+    "set": "Instellen",
+    "password": "Wachtwoord",
+    "confirm_password": "Bevestig Wachtwoord",
+    "login": "Log in",
+    "welcome": "Welkom bij de Minetest Launcher. Voer uw wachtwoord in om uw gebruikers-data te decrypten.",
+    "first_time": {
+      "title": "Eerste keer?",
+      "welcome": "Welkom bij de Minetest Launcher. Voor we beginnen moet u <strong>een wachtwoord instellen</strong> om lokaal sommige gevoelige instellingen (wachtwoorden voor servers, etc.) te encrypten"
+    },
+    "passwords_no_match": {
+      "title": "Wachtwoorden komen niet overeen",
+      "content": "De ingevoerde wachtwoorden komen niet overeen. Probeer het opnieuw."
+    },
+    "password_invalid": {
+      "title": "Wachtwoord Onjuist",
+      "content": "Dit wachtwoord is onjuist. Probeer het opnieuw."
+    }
+  },
+  "navbar": {
+    "news": "Nieuws",
+    "worlds": "Werelden",
+    "games": "Spellen",
+    "mods": "Mods",
+    "play_online": "Speel Online",
+    "screenshots": "Screenshots"
+  },
+  "home": {
+    "welcome": "Welkom bij MTLauncher"
+  },
+  "profile": {
+    "username": "Gebruikersnaam",
+    "password": "Wachtwoord",
+    "generate_password": "Genereer Wachtwoord",
+    "save_profile": "Sla Profiel Op"
+  },
+  "serverlist": {
+    "all_servers": "Alle Servers",
+    "favourite_servers": "Favouriete Servers",
+    "ping": "Ping",
+    "players": "Spelers",
+    "name": "Naam",
+    "uptime": "Uptime",
+    "out_of": "{current} van de {max}"
+  },
+  "news": {
+    "posted_on": "Geplaatst op {date}"
+  },
+  "content": {
+    "by_author": "Door {author}",
+    "supports_version": "Ondersteunt versie <strong>{version}</strong>",
+    "not_supports_version": "Ondersteunt versie <strong>{version}</strong> niet",
+    "tags": {
+      "wip": "Werk in Uitvoering"
+    }
+  },
+  "games": {
+    "all_games": "Alle Spellen",
+    "installed_games": "Geïnstalleerde Spellen",
+    "install_game": "Installeer Spel",
+    "launch_game": "Speel Spel"
+  },
+  "mods": {
+    "all_mods": "Alle Mods",
+    "installed_mods": "Geïnstalleerde Mods",
+    "install_mod": "Installeer Mod",
+    "delete_mod": "Verwijder Mod",
+    "toggle_mod": "Schakel Mod",
+    "required_dependencies": "Vereiste afhankelijkheden:",
+    "installing_status": "Installeren van {progress}/{max} pakketen",
+    "current_package": "Huidig pakket \"{package}\""
+  },
+  "screenshots": {
+    "all_screenshots": "Alle Screenshots",
+    "for_selected_version": "Screenshots voor geselecteerde versie",
+    "no_screenshots": "Geen Screenshots"
+  },
+  "settings": {
+    "title": "Minetest Instellingen",
+    "note": "Deze instellingen worden toegepast op <em>alle</em> versie's van Minetest.",
+    "save": "Opslaan!",
+    "nodes": {
+      "screen": {
+        "title": "Scherm",
+        "fullscreen": {
+          "name": "Volledig scherm",
+          "description": "Of het spelvenster wel of niet op volledig scherm is"
+        },
+        "screen_w": {
+          "name": "Scherm Breedte",
+          "description": "De breedte van het spelvenster, genegeerd wanneer fullscreen = true"
+        },
+        "screen_h": {
+          "name": "Scherm Hoogte",
+          "description": "De hoogte van het spelvenster, genegeerd wanneer fullscreen = true"
+        },
+        "pause_on_lost_focus": {
+          "name": "Pauzeer wanneer focus verloren",
+          "description": "Of het spel wel of niet moet worden gepauzeerd wanneer een ander venster actief is."
+        },
+        "fps_max": {
+          "name": "FPS Max",
+          "description": "Limiet van FPS (frames per seconde)"
+        },
+        "vsync": {
+          "name": "VSync",
+          "description": "Verticale schermsynchronisatie"
+        }
+      },
+      "controls": {
+        "title": "Bediening",
+        "mouse_sensitivity": {
+          "name": "Muis Gevoeligheid",
+          "description": "De gevoeligheid van uw muis. Hoger = snellere muisbewegingen"
+        },
+        "invert_mouse": {
+          "name": "Muis Omkeren",
+          "description": "Verticale muisbeweging omkeren"
+        }
+      }
+    }
+  },
+  "time": {
+    "year": "jaar",
+    "years": "jaren",
+    "day": "dag",
+    "days": "dagen",
+    "hour": "uur",
+    "hours": "uren",
+    "minute": "minuut",
+    "minutes": "minuten",
+    "seconds": "seconden"
+  }
+}

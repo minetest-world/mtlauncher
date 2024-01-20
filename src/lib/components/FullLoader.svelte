@@ -1,5 +1,6 @@
 <script>
 	import Spinner from '$lib/icon/Spinner.svelte';
+	import { _ } from 'svelte-i18n';
 </script>
 
 <div class="w-full h-full flex items-center justify-center">
@@ -8,7 +9,7 @@
 			<Spinner />
 		</div>
 		<div class="text-2xl font-bold">
-			Loading...
+			{$_('general.loading')}
 		</div>
 	</div>
 </div>

@@ -8,35 +8,42 @@
 	import FullLoader from '$lib/components/FullLoader.svelte';
 	import Link from '$lib/components/text/Link.svelte';
 
+	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	let slug = $page.params.slug;
 
 	import { selectedVersion } from '$lib/stores';
-	import { getPackageInfo, isInstalledForVersion, isSupportedForVersion } from '$lib/api/contentdb';
-	import { downloadAndUnzip } from '$lib/api/download';
-	import { openGame } from '$lib/shell';
+	import { getPackageInfo, isInstalledForVersion, getDepList, isSupportedForVersion } from '$lib/api/contentdb';
+	import { installMod as actualInstallMod, toggleMod, deleteMod } from '$lib/file/mods';
 	import { showText } from '$lib/modal';
 
 	import { onMount } from 'svelte';
-
+	import { writable } from 'svelte/store';
 
 	let packageInfo = false;
-	let isInstalled = false;
+	let isInstalled = writable(false);
 	let isSupported = null; // false = NO, null = MAYBE, true = YES
 
-	let installing = false;
+	let installing = writable(false);
+	let modsToInstall = writable([]);
+	let progress = writable(0);
+	let currentInstalling = writable("");
 
 	let [ author, pack ] = slug.split('@');
 
-	onMount(async() => {
-		let slugParts = slug.split('@');
-		packageInfo = await getPackageInfo(slugParts[0], slugParts[1]);
+	onMount(updatePackage);
+	page.subscribe(updatePackage);
+
+	async function updatePackage() {
+		slug = $page.params.slug;
+		[ author, pack ] = slug.split('@');
+		packageInfo = await getPackageInfo(author, pack);
 
 		if ($selectedVersion.installed) {
-	 		isInstalled = await isInstalledForVersion(slugParts[1], 'games', $selectedVersion.name);
+			$isInstalled = await isInstalledForVersion(pack, 'mods', $selectedVersion.name);
 			isSupported = isSupportedForVersion(packageInfo, $selectedVersion);
 		}
-	});
+	};
 
 	selectedVersion.subscribe(async(val) => {
 		if (!val.installed) {
@@ -44,23 +51,13 @@
 			return;
 		}
 
-		isInstalled = await isInstalledForVersion(pack, 'games', val.name);
+		$isInstalled = await isInstalledForVersion(pack, 'mods', val.name);
 		isSupported = isSupportedForVersion(packageInfo, val);
 	});
 
-	async function install(url, version, name) {
-		if (installing) return;
 
-		installing = true;
-		try {
-			await downloadAndUnzip(url, `/versions/${version.name}/games/${name}`);
-			isInstalled = true;
-		}
-		catch (err) {
-			showText(err);
-			console.log(err);
-		}
-		installing = false;
+	async function installMod(packageInfo, version = '5.6.0') {
+		return await actualInstallMod(packageInfo, version, installing, modsToInstall, progress, currentInstalling, isInstalled);
 	}
 
 </script>
@@ -86,6 +83,19 @@
 					</div>
 					<span class="text-2xl font-bold">{packageInfo.title}</span>
 					<span>{$_('content.by_author', { values: { author: packageInfo.author } })}</span>
+					{#if packageInfo.hard_dependencies && packageInfo.hard_dependencies.length > 0}
+						<br>
+						<div class="pb-4">
+							<span>{$_('mods.required_dependencies')}</span><br>
+							{#each packageInfo.hard_dependencies as dep}
+								{#if dep.slug}
+									<Tag class="bg-blue-500 hover:bg-emerald-400 hover:cursor-pointer" on:click={() => goto(`/mods/${dep.slug}`)} tag={dep.slug.replace('@','/')} />
+								{:else}
+									<Tag class="bg-blue-500" tag={dep.name} />
+								{/if}
+							{/each}
+						</div>
+					{/if}
 				</div>
 				<div class="flex flex-col items-end justify-end">
 					{#if isSupported != null}
@@ -98,26 +108,30 @@
 							{:else}
 								<Plus class="bg-red-500 w-6 h-6 mr-2 rotate-45" circle=true />
 								<span>
-									{@html $_('content.not_supports_version', { values: { version: $selectedVersion.name } })}
+									{@html $_('content.supports_version', { values: { version: $selectedVersion.name } })}
 								</span>
 							{/if}
 						</div>
 					{/if}
-					<div class="pt-4">
+					<div class="pt-4 flex">
 						{#if $selectedVersion.installed}
-							{#if !isInstalled}
-							<button on:click={async () => await install(packageInfo.url, $selectedVersion, pack)} class="bg-emerald-500 hover:bg-emerald-400 p-4 font-bold text-white flex flex-col items-center">
-								{#if installing}
-									<div>{$_('general.installing.title')}</div>
-									<div class="font-medium text-sm">{$_('general.installing.subtitle')}</div>
+							{#if !$isInstalled}
+							<button on:click={async () => !$installing && (await installMod(packageInfo, $selectedVersion.name))} class="bg-emerald-500 hover:bg-emerald-400 p-4 font-bold text-white flex flex-col items-center">
+								{#if $installing}
+									<div>{$_('mods.installing_status', { values: { progress: $progress, max: $modsToInstall.length } })}</div>
+									<div class="font-medium text-sm">{$_('mods.current_package', { values: { package: $currentInstalling } })}</div>
 								{:else}
-									<div>{$_('games.install_game')}</div>
+									<div>{$_('mods.install_mod')}</div>
 									<div class="font-medium text-sm">{$_('general.for_version', { values: { version: $selectedVersion.name } })}</div>
 								{/if}
 							</button>
 							{:else}
-								<button on:click={async () => await openGame(pack, $selectedVersion.name)} class="bg-emerald-500 hover:bg-emerald-400 p-4 font-bold text-white flex flex-col items-center">
-									<div>{$_('games.launch_game')}</div>
+								<button on:click={async () => await deleteMod(pack, $selectedVersion.name)} class="bg-red-500 hover:bg-red-400 p-4 font-bold text-white flex flex-col items-center">
+									<div>{$_('mods.delete_mod')}</div>
+									<div class="font-medium text-sm">{$_('general.version', { values: { version: $selectedVersion.name } })}</div>
+								</button>
+								<button on:click={async () => await toggleMod(pack, $selectedVersion.name)} class="bg-emerald-500 hover:bg-emerald-400 p-4 font-bold text-white flex flex-col items-center">
+									<div>{$_('mods.toggle_mod')}</div>
 									<div class="font-medium text-sm">{$_('general.version', { values: { version: $selectedVersion.name } })}</div>
 								</button>
 							{/if}

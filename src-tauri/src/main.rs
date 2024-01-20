@@ -3,12 +3,10 @@
   windows_subsystem = "windows"
 )]
 
-use tauri_plugin_fs_watch::Watcher;
-
 fn main() {
   tauri::Builder::default()
-      .plugin(Watcher::default())
-      .invoke_handler(tauri::generate_handler![open_minetest, download_and_unzip, download_file])
+    .plugin(tauri_plugin_fs_watch::init())
+    .invoke_handler(tauri::generate_handler![open_minetest, download_and_unzip, download_file])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
 }
@@ -19,23 +17,23 @@ use std::path::Path;
 use std::path::PathBuf;
 
 use std::fs::File;
-use std::fs::metadata;
+//use std::fs::metadata;
 
 use std::{io, fs};
 use std::io::prelude::*;
 
-use zip_extensions::*;
+//use zip_extensions::*;
 
 #[tauri::command]
 fn get_app_dir(app_handle: tauri::AppHandle) -> Option<PathBuf> {
-  return app_handle.path_resolver().app_dir();
+  return app_handle.path_resolver().app_data_dir();
 }
 
 #[tauri::command]
 async fn download_file(app_handle: tauri::AppHandle, url: String, target: String) -> bool{
-  let app_dir = app_handle.path_resolver().app_dir().unwrap().into_os_string().into_string().to_owned().unwrap();
+  let app_dir = app_handle.path_resolver().app_data_dir().unwrap().into_os_string().into_string().to_owned().unwrap();
   let response = reqwest::get(&url).await.unwrap();
-  let mut location = (app_dir.to_string() + &target).to_owned();
+  let location = (app_dir.to_string() + &target).to_owned();
 
   let path = Path::new(&location);
 
@@ -47,7 +45,7 @@ async fn download_file(app_handle: tauri::AppHandle, url: String, target: String
   };
 
   let content = response.bytes().await.unwrap();
-  file.write_all(content.as_ref());
+  let _ = file.write_all(content.as_ref());
   println!("done");
 
   return true;
@@ -59,11 +57,11 @@ async fn download_and_unzip(app_handle: tauri::AppHandle, url: String, target: S
   println!("{}", url);
   println!("{}", target);
 
-  let app_dir = app_handle.path_resolver().app_dir().unwrap().into_os_string().into_string().to_owned().unwrap();
+  let app_dir = app_handle.path_resolver().app_data_dir().unwrap().into_os_string().into_string().to_owned().unwrap();
 
   let response = reqwest::get(&url).await.unwrap();
 
-  let mut zip_location = (app_dir.to_string() + "/tmp.zip").to_owned();
+  let zip_location = (app_dir.to_string() + "/tmp.zip").to_owned();
   println!("{}", zip_location);
 
   let path = Path::new(&zip_location);
@@ -73,16 +71,16 @@ async fn download_and_unzip(app_handle: tauri::AppHandle, url: String, target: S
     Ok(file) => file,
   };
   let content =  response.bytes().await.unwrap();
-  file.write_all(content.as_ref());
+  let _ = file.write_all(content.as_ref());
 
-  let mut zip_file1 = File::open(&path).unwrap();
+  let zip_file1 = File::open(&path).unwrap();
 
 
-  let mut zip = zip::ZipArchive::new(zip_file1).unwrap();
+  let _zip = zip::ZipArchive::new(zip_file1).unwrap();
 
-  let mut final_location = app_dir.to_string() + &target;
+  let final_location = app_dir.to_string() + &target;
   println!("{}", final_location);
-  zip_extensions::read::zip_extract(
+  let _ = zip_extensions::read::zip_extract(
     &PathBuf::from(path),
     &PathBuf::from(final_location.clone()),
   );
@@ -93,13 +91,13 @@ async fn download_and_unzip(app_handle: tauri::AppHandle, url: String, target: S
   if count == 1 {
     for file in fs::read_dir(final_location.clone()).unwrap() {
       if fs::metadata(file.as_ref().unwrap().path()).unwrap().is_dir() {
-        copy_dir_all(file.as_ref().unwrap().path(), final_location.clone());
+        let _ = copy_dir_all(file.as_ref().unwrap().path(), final_location.clone());
         fs::remove_dir_all(file.as_ref().unwrap().path()).unwrap();
       }
     }
   }
 
-  fs::remove_file(&path);
+  let _ = fs::remove_file(&path);
 
   println!("done");
   return true;
@@ -124,7 +122,7 @@ fn open_minetest(loc: String, content_dir: String, args: Vec<String>) {
   //TODO: can we pipe stdio/stderr back to the launcher?
   //this would be really handy for a lot of reasons
   //also this is really fucking insecure LOL
-  Command::new(loc)
+  let _ = Command::new(loc)
       .env("MINETEST_USER_PATH", content_dir)
       .args(args)
       .spawn();
